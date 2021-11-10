@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02FC7CA52736AD8E004E998A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FC7CA42736AD8E004E998A /* main.c */; };
+		02FC7CAD2736ADD7004E998A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FC7CAC2736ADD7004E998A /* main.c */; };
+		02FC7CB02736AF00004E998A /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */; };
+		02FC7CB12736AF00004E998A /* libSDL2-2.0.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,11 +22,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		02FC7CB22736AF00004E998A /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				02FC7CB12736AF00004E998A /* libSDL2-2.0.0.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02FC7CA12736AD8E004E998A /* Corridor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Corridor; sourceTree = BUILT_PRODUCTS_DIR; };
-		02FC7CA42736AD8E004E998A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		02FC7CAB2736ADD7004E998A /* consts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = consts.h; sourceTree = "<group>"; };
+		02FC7CAC2736ADD7004E998A /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02FC7CB02736AF00004E998A /* libSDL2-2.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +59,7 @@
 			children = (
 				02FC7CA32736AD8E004E998A /* Corridor */,
 				02FC7CA22736AD8E004E998A /* Products */,
+				02FC7CAE2736AF00004E998A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +74,18 @@
 		02FC7CA32736AD8E004E998A /* Corridor */ = {
 			isa = PBXGroup;
 			children = (
-				02FC7CA42736AD8E004E998A /* main.c */,
+				02FC7CAB2736ADD7004E998A /* consts.h */,
+				02FC7CAC2736ADD7004E998A /* main.c */,
 			);
 			path = Corridor;
+			sourceTree = "<group>";
+		};
+		02FC7CAE2736AF00004E998A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -69,9 +95,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02FC7CA82736AD8E004E998A /* Build configuration list for PBXNativeTarget "Corridor" */;
 			buildPhases = (
-				02FC7C9D2736AD8E004E998A /* Sources */,
 				02FC7C9E2736AD8E004E998A /* Frameworks */,
 				02FC7C9F2736AD8E004E998A /* CopyFiles */,
+				02FC7CB22736AF00004E998A /* Embed Libraries */,
+				02FC7C9D2736AD8E004E998A /* Sources */,
 			);
 			buildRules = (
 			);
@@ -119,7 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02FC7CA52736AD8E004E998A /* main.c in Sources */,
+				02FC7CAD2736ADD7004E998A /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +270,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D59VJW7NKK;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -253,6 +284,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D59VJW7NKK;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -267,7 +302,7 @@
 				02FC7CA72736AD8E004E998A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02FC7CA82736AD8E004E998A /* Build configuration list for PBXNativeTarget "Corridor" */ = {
 			isa = XCConfigurationList;
@@ -276,7 +311,7 @@
 				02FC7CAA2736AD8E004E998A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
