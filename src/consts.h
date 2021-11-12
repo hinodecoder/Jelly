@@ -16,6 +16,9 @@
 #define WINDOW_W (MAP_NUM_COLS * TILE_SIZE)
 #define WINDOW_H (MAP_NUM_ROWS * TILE_SIZE)
 
+#define TEXTURE_W 64
+#define TEXTURE_H 64
+
 #define FOV_ANGLE (60 * (PI / 180))
 
 #define NUM_RAYS WINDOW_W

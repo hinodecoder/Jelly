@@ -45,7 +45,7 @@ typedef struct ray_t {
     float WallHitX;
     float WallHitY;
     float Distance;
-    int WalHitVertical;
+    int WasHitVertical;
     int IsRayFacingUp;
     int IsRayFacingDown;
     int IsRayFacingLeft;
@@ -64,6 +64,9 @@ int TicksLastFrame = 0;
 
 uint32_t* ColorBuffer = NULL;
 SDL_Texture* ColorBufferTexture = NULL;
+
+// Fake wall texture for now.
+uint32_t* WallTexture = NULL;
 
 int InitializeWindow(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -122,6 +125,15 @@ void Setup(void) {
     
     // Create color buffer texture for SDL.
     ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
+    
+    WallTexture = (uint32_t*) malloc(sizeof(uint32_t) * (uint32_t)TEXTURE_W * (uint32_t)TEXTURE_H);
+    
+    // Create sample texture pattern.
+    for (int32_t x=0; x < TEXTURE_W; ++x) {
+        for (int32_t y=0; y < TEXTURE_H; ++y) {
+            WallTexture[(TEXTURE_W * y) + x] = (x % 8 && y % 8) ? 0xff0000ff : 0xff000000;
+        }
+    }
 }
 
 
@@ -301,13 +313,13 @@ void CastRay(float RayAngle, int StripId) {
         Rays[StripId].WallHitX = wallHitX_vertical;
         Rays[StripId].WallHitY = wallHitY_vertical;
         Rays[StripId].WallHitContent = VerticalWallContent;
-        Rays[StripId].WalHitVertical = TRUE;
+        Rays[StripId].WasHitVertical = TRUE;
     } else {
         Rays[StripId].Distance = HorizontalHitDistance;
         Rays[StripId].WallHitX = wallHitX_horizontal;
         Rays[StripId].WallHitY = wallHitY_horizontal;
         Rays[StripId].WallHitContent = HorizontalWallContent;
-        Rays[StripId].WalHitVertical = FALSE;
+        Rays[StripId].WasHitVertical = FALSE;
     }
     
     Rays[StripId].RayAngle = RayAngle;
@@ -455,12 +467,32 @@ void Generate3DProjection(void) {
         
         // Color for ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            ColorBuffer[(WINDOW_W * y) + i] = 0xff040c06;
+            ColorBuffer[(WINDOW_W * y) + i] = 0xffcccccc;
+        }
+        
+        int32_t TextureOffsetX = 0;
+        
+        // Base on vertical or horizontal hit we take remainder of proper axis.
+        if (Rays[i].WasHitVertical) {
+            TextureOffsetX = (int32_t) Rays[i].WallHitY % TILE_SIZE;
+        } else {
+            TextureOffsetX = (int32_t) Rays[i].WallHitX % TILE_SIZE;
         }
         
         // Render the wall from top to bottom pixels.
         for (int y = WallTopPixel; y < WallBottomPixel; ++y) {
-            ColorBuffer[(WINDOW_W * y) + i] = Rays[i].WalHitVertical ? 0xff89a257 : 0xffbedc7f;
+            // NOTE: Calculate distance from top because we do clamping on top pixel height and it
+            // distorts our view while mapping a texture.
+            int32_t DistanceFromTop = (y + WallStripHeight * 0.5f) - (WINDOW_H * 0.5f);
+            
+            // NOTE: Calculating texture offset in Y but we need to take "perspective" into consideration.
+            // To calculate it we need overall wall height (wall strip height).
+            int32_t TextureOffsetY = DistanceFromTop * ((float)TEXTURE_H / WallStripHeight);
+            
+            // Set color from sample texture.
+            uint32_t TexelColor = WallTexture[(TEXTURE_W * TextureOffsetY) + TextureOffsetX];
+            
+            ColorBuffer[(WINDOW_W * y) + i] = TexelColor;
         }
         
         // Color for floor.
