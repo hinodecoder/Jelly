@@ -40,6 +40,7 @@
 		02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		02FEDD11273ED1D9009F63A7 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		02FEDD12273ED1D9009F63A7 /* consts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = consts.h; sourceTree = "<group>"; };
+		02FEDD14273EEA1E009F63A7 /* textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = textures.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +83,7 @@
 		02FEDD10273ED1D9009F63A7 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				02FEDD14273EEA1E009F63A7 /* textures.h */,
 				02FEDD11273ED1D9009F63A7 /* main.c */,
 				02FEDD12273ED1D9009F63A7 /* consts.h */,
 			);

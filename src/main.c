@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <SDL2/SDL.h>
 #include "consts.h"
+#include "textures.h"
 
 
 
@@ -11,11 +12,11 @@ const int Map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
+    {1, 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 1, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -66,7 +67,7 @@ uint32_t* ColorBuffer = NULL;
 SDL_Texture* ColorBufferTexture = NULL;
 
 // Fake wall texture for now.
-uint32_t* WallTexture = NULL;
+uint32_t* Textures[NUM_TEXTURES] = {0};
 
 int InitializeWindow(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -126,14 +127,14 @@ void Setup(void) {
     // Create color buffer texture for SDL.
     ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
     
-    WallTexture = (uint32_t*) malloc(sizeof(uint32_t) * (uint32_t)TEXTURE_W * (uint32_t)TEXTURE_H);
-    
-    // Create sample texture pattern.
-    for (int32_t x=0; x < TEXTURE_W; ++x) {
-        for (int32_t y=0; y < TEXTURE_H; ++y) {
-            WallTexture[(TEXTURE_W * y) + x] = (x % 8 && y % 8) ? 0xff0000ff : 0xff000000;
-        }
-    }
+    Textures[0] = (uint32_t*)REDBRICK_TEXTURE;
+    Textures[1] = (uint32_t*)WOOD_TEXTURE;
+    Textures[2] = (uint32_t*)EAGLE_TEXTURE;
+    Textures[3] = (uint32_t*)BLUESTONE_TEXTURE;
+    Textures[4] = (uint32_t*)GRAYSTONE_TEXTURE;
+    Textures[5] = (uint32_t*)COLORSTONE_TEXTURE;
+    Textures[6] = (uint32_t*)MOSSYSTONE_TEXTURE;
+    Textures[7] = (uint32_t*)PURPLESTONE_TEXTURE;
 }
 
 
@@ -490,7 +491,8 @@ void Generate3DProjection(void) {
             int32_t TextureOffsetY = DistanceFromTop * ((float)TEXTURE_H / WallStripHeight);
             
             // Set color from sample texture.
-            uint32_t TexelColor = WallTexture[(TEXTURE_W * TextureOffsetY) + TextureOffsetX];
+            uint32_t* CurrentTexture = Textures[Rays[i].WallHitContent - 1];
+            uint32_t TexelColor = CurrentTexture[(TEXTURE_W * TextureOffsetY) + TextureOffsetX];
             
             ColorBuffer[(WINDOW_W * y) + i] = TexelColor;
         }
