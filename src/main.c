@@ -51,7 +51,6 @@ typedef struct ray_t {
     int IsRayFacingLeft;
     int IsRayFacingRight;
     int WallHitContent; // For ex. color or texture index.
-    // TODO: Remove this unnecessary crap
 } ray_t;
 
 ray_t Rays[NUM_RAYS];
@@ -288,7 +287,6 @@ void CastRay(float RayAngle, int StripId) {
     
     // Calculate both horizontal and vertical distances and choose
     // the smallest one.
-    // TODO: Clear this shit. Looks like crap now.
     float HorizontalHitDistance = foundHWallHit
     ? DistanceBetweenPoints(Player.X, Player.Y, wallHitX_horizontal, wallHitY_horizontal)
     : FLT_MAX;
@@ -457,17 +455,17 @@ void Generate3DProjection(void) {
         
         // Color for ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            ColorBuffer[(WINDOW_W * y) + i] = 0xff333333;
+            ColorBuffer[(WINDOW_W * y) + i] = 0xff040c06;
         }
         
         // Render the wall from top to bottom pixels.
         for (int y = WallTopPixel; y < WallBottomPixel; ++y) {
-            ColorBuffer[(WINDOW_W * y) + i] = Rays[i].WalHitVertical ? 0xffffffff : 0xffcccccc;
+            ColorBuffer[(WINDOW_W * y) + i] = Rays[i].WalHitVertical ? 0xff89a257 : 0xffbedc7f;
         }
         
         // Color for floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
-            ColorBuffer[(WINDOW_W * y) + i] = 0xff777777;
+            ColorBuffer[(WINDOW_W * y) + i] = 0xff1e3a29;
         }
     }
 }

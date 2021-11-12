@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02FC7CAD2736ADD7004E998A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FC7CAC2736ADD7004E998A /* main.c */; };
 		02FC7CB02736AF00004E998A /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */; };
 		02FC7CB12736AF00004E998A /* libSDL2-2.0.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		02FEDD13273ED1DA009F63A7 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FEDD11273ED1D9009F63A7 /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,9 +37,9 @@
 
 /* Begin PBXFileReference section */
 		02FC7CA12736AD8E004E998A /* Corridor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Corridor; sourceTree = BUILT_PRODUCTS_DIR; };
-		02FC7CAB2736ADD7004E998A /* consts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = consts.h; sourceTree = "<group>"; };
-		02FC7CAC2736ADD7004E998A /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
+		02FEDD11273ED1D9009F63A7 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		02FEDD12273ED1D9009F63A7 /* consts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = consts.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 		02FC7C982736AD8E004E998A = {
 			isa = PBXGroup;
 			children = (
-				02FC7CA32736AD8E004E998A /* Corridor */,
+				02FEDD10273ED1D9009F63A7 /* src */,
 				02FC7CA22736AD8E004E998A /* Products */,
 				02FC7CAE2736AF00004E998A /* Frameworks */,
 			);
@@ -71,21 +71,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		02FC7CA32736AD8E004E998A /* Corridor */ = {
-			isa = PBXGroup;
-			children = (
-				02FC7CAB2736ADD7004E998A /* consts.h */,
-				02FC7CAC2736ADD7004E998A /* main.c */,
-			);
-			path = Corridor;
-			sourceTree = "<group>";
-		};
 		02FC7CAE2736AF00004E998A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		02FEDD10273ED1D9009F63A7 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				02FEDD11273ED1D9009F63A7 /* main.c */,
+				02FEDD12273ED1D9009F63A7 /* consts.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,7 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02FC7CAD2736ADD7004E998A /* main.c in Sources */,
+				02FEDD13273ED1DA009F63A7 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
