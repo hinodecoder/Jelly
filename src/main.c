@@ -125,7 +125,7 @@ void Setup(void) {
     ColorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * (uint32_t)WINDOW_W * (uint32_t)WINDOW_H);
     
     // Create color buffer texture for SDL.
-    ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
+    ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
     
     LoadTextures();
 }
