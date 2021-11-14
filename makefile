@@ -1,8 +1,8 @@
 build:
-	gcc -std=c99 ./src/*.c -lSDL2 -o corridor;
+	gcc -std=c99 ./src/*.c -lSDL2 -o edgar;
 
 run:
-	./corridor;
+	./edgar;
 
 clean:
-	rm corridor;
+	rm edgar;
