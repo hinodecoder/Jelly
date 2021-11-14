@@ -10,6 +10,8 @@
 		02FC7CB02736AF00004E998A /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */; };
 		02FC7CB12736AF00004E998A /* libSDL2-2.0.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		02FEDD13273ED1DA009F63A7 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FEDD11273ED1D9009F63A7 /* main.c */; };
+		02FEDD1727413E55009F63A7 /* upng.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FEDD1627413E55009F63A7 /* upng.c */; };
+		02FEDD1A27414222009F63A7 /* textures.c in Sources */ = {isa = PBXBuildFile; fileRef = 02FEDD1927414222009F63A7 /* textures.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,7 +42,10 @@
 		02FC7CAF2736AF00004E998A /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../usr/local/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		02FEDD11273ED1D9009F63A7 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		02FEDD12273ED1D9009F63A7 /* consts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = consts.h; sourceTree = "<group>"; };
-		02FEDD14273EEA1E009F63A7 /* textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = textures.h; sourceTree = "<group>"; };
+		02FEDD1527413E55009F63A7 /* upng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upng.h; sourceTree = "<group>"; };
+		02FEDD1627413E55009F63A7 /* upng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upng.c; sourceTree = "<group>"; };
+		02FEDD1827413EA3009F63A7 /* textures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = textures.h; sourceTree = "<group>"; };
+		02FEDD1927414222009F63A7 /* textures.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = textures.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,9 +88,12 @@
 		02FEDD10273ED1D9009F63A7 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				02FEDD14273EEA1E009F63A7 /* textures.h */,
+				02FEDD1627413E55009F63A7 /* upng.c */,
+				02FEDD1527413E55009F63A7 /* upng.h */,
 				02FEDD11273ED1D9009F63A7 /* main.c */,
 				02FEDD12273ED1D9009F63A7 /* consts.h */,
+				02FEDD1827413EA3009F63A7 /* textures.h */,
+				02FEDD1927414222009F63A7 /* textures.c */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -148,7 +156,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02FEDD1A27414222009F63A7 /* textures.c in Sources */,
 				02FEDD13273ED1DA009F63A7 /* main.c in Sources */,
+				02FEDD1727413E55009F63A7 /* upng.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

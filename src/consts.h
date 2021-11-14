@@ -11,7 +11,7 @@
 #define MAP_NUM_ROWS 13
 #define MAP_NUM_COLS 20
 
-#define NUM_TEXTURES 8
+#define NUM_TEXTURES 2
 
 #define MINIMAP_SCALE_FACTOR 0.25
 
