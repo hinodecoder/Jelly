@@ -325,12 +325,9 @@ void CastRay(float RayAngle, int StripId) {
 
 
 void CastAllRays(void) {
-    float RayAngle = Player.RotationAngle - (FOV_ANGLE / 2);
-    
-    for (int StripId = 0; StripId < NUM_RAYS; ++StripId) {
-        CastRay(RayAngle, StripId);
-        
-        RayAngle += FOV_ANGLE / NUM_RAYS;
+    for (int Column = 0; Column < NUM_RAYS; ++Column) {
+        float RayAngle = Player.RotationAngle + atan((Column - (NUM_RAYS / 2)) / DISTANCE_TO_PROJECTION_PLANE);
+        CastRay(RayAngle, Column);
     }
 }
 
@@ -445,10 +442,7 @@ void Generate3DProjection(void) {
     for (int i=0; i < NUM_RAYS; i++) {
         float PerpendicularDistance = Rays[i].Distance * cos(Rays[i].RayAngle - Player.RotationAngle);
         
-        // How far we are from projection plane.
-        float DistanceToProjectionPlane = (WINDOW_W / 2) / tan(FOV_ANGLE / 2);
-        
-        float ProjectedWallHeight = (TILE_SIZE / PerpendicularDistance) * DistanceToProjectionPlane;
+        float ProjectedWallHeight = (TILE_SIZE / PerpendicularDistance) * DISTANCE_TO_PROJECTION_PLANE;
         
         // TODO: Replace, duplicate variable
         int WallStripHeight = ProjectedWallHeight;
@@ -473,6 +467,13 @@ void Generate3DProjection(void) {
             TextureOffsetX = (int32_t) Rays[i].WallHitX % TILE_SIZE;
         }
         
+        
+        // TODO: Add some null checks
+        texture_t* CurrentTexture = GetTexture(Rays[i].WallHitContent - 1);
+        uint32_t* TextureBuffer = CurrentTexture->Buffer;
+        const int32_t TextureW = CurrentTexture->Width;
+        const int32_t TextureH = CurrentTexture->Height;
+        
         // Render the wall from top to bottom pixels.
         for (int y = WallTopPixel; y < WallBottomPixel; ++y) {
             // NOTE: Calculate distance from top because we do clamping on top pixel height and it
@@ -481,11 +482,10 @@ void Generate3DProjection(void) {
             
             // NOTE: Calculating texture offset in Y but we need to take "perspective" into consideration.
             // To calculate it we need overall wall height (wall strip height).
-            int32_t TextureOffsetY = DistanceFromTop * ((float)TEXTURE_H / WallStripHeight);
+            int32_t TextureOffsetY = DistanceFromTop * ((float)TextureH / WallStripHeight);
             
             // Set color from sample texture.
-            uint32_t* TextureBuffer = GetTexture(Rays[i].WallHitContent - 1)->Buffer;
-            uint32_t TexelColor = TextureBuffer[(TEXTURE_W * TextureOffsetY) + TextureOffsetX];
+            uint32_t TexelColor = TextureBuffer[(TextureW * TextureOffsetY) + TextureOffsetX];
             
             ColorBuffer[(WINDOW_W * y) + i] = TexelColor;
         }

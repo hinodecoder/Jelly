@@ -1,6 +1,8 @@
 #ifndef CONSTS_H
 #define CONSTS_H
 
+#include <math.h>
+
 #define FALSE 0
 #define TRUE 1
 
@@ -11,21 +13,23 @@
 #define MAP_NUM_ROWS 13
 #define MAP_NUM_COLS 20
 
-#define NUM_TEXTURES 2
 
 #define MINIMAP_SCALE_FACTOR 0.25
 
 #define WINDOW_W (MAP_NUM_COLS * TILE_SIZE)
 #define WINDOW_H (MAP_NUM_ROWS * TILE_SIZE)
 
-#define TEXTURE_W 64
-#define TEXTURE_H 64
-
 #define FOV_ANGLE (60 * (PI / 180))
 
 #define NUM_RAYS WINDOW_W
 
+// TODO: Move to some kind of a function?
+#define DISTANCE_TO_PROJECTION_PLANE ((WINDOW_W / 2) / tan(FOV_ANGLE / 2))
+
 #define FPS 60
 #define FRAME_TIME_LENGTH (1000 / FPS)
+
+// Textures config.
+#define NUM_TEXTURES 2
 
 #endif
