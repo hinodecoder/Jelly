@@ -18,6 +18,14 @@ void WriteColorBuffer(int32_t X, int32_t Y, uint32_t Color, uint32_t BufferWidth
     ColorBuffer[(BufferWidth * Y) + X] = Color;
 }
 
+void DrawRectangle(int32_t X, int32_t Y, int32_t Width, int32_t Height, uint32_t Color, uint32_t BufferWidth) {
+    for (int32_t i=X; i <= (X + Width); ++i) {
+        for (int32_t j=Y; j <= (Y + Height); j++) {
+            WriteColorBuffer(i, j, Color, BufferWidth);
+        }
+    }
+}
+
 void ClearColorBuffer(uint32_t Color, uint32_t Width, uint32_t Height) {
     for (int i = 0; i < Width * Height; ++i) {
         ColorBuffer[i] = Color;

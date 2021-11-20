@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "textures.h"
 
+
+#define NUM_TEXTURES 2
+
 static const char* TexturesPaths[NUM_TEXTURES] = {
     "./data/textures/bricks.png",
     "./data/textures/stone.png"

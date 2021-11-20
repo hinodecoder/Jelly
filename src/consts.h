@@ -7,10 +7,8 @@
 #define TWO_PI 6.28318530
 
 #define TILE_SIZE 64
-#define MAP_NUM_ROWS 13
-#define MAP_NUM_COLS 20
 
-#define MINIMAP_SCALE_FACTOR 0.25
+#define MINIMAP_SCALE_FACTOR 0.15
 
 #define WINDOW_W 1280
 #define WINDOW_H 800
@@ -24,8 +22,5 @@
 
 #define FPS 60
 #define FRAME_TIME_LENGTH (1000 / FPS)
-
-// Textures config.
-#define NUM_TEXTURES 2
 
 #endif

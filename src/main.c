@@ -6,6 +6,7 @@
 #include "consts.h"
 #include "textures.h"
 #include "graphics.h"
+#include "map.h"
 
 
 //
@@ -14,21 +15,6 @@
 //
 
 
-const int Map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-};
 
 typedef struct {
     float X;
@@ -138,18 +124,6 @@ void Setup(void) {
 }
 
 
-bool MapHasWallAt(float X, float Y) {
-    if (X < 0 || X >= MAP_NUM_COLS * TILE_SIZE || Y < 0 || Y >= MAP_NUM_ROWS * TILE_SIZE) {
-        return true;
-    }
-    
-    int MapGridIndexX = floor(X / TILE_SIZE);
-    int MapGridIndexY = floor(Y / TILE_SIZE);
-    
-    return Map[MapGridIndexY][MapGridIndexX] != 0;
-}
-
-
 void MovePlayer(float DeltaTime) {
     Player.RotationAngle += Player.TurnDirection * Player.TurnSpeed * DeltaTime;
     float MoveStep = Player.WalkDirection * Player.WalkSpeed * DeltaTime;
@@ -238,7 +212,8 @@ void CastRay(float RayAngle, int StripId) {
     float nextHY = yintercept;
 
     // Inceremnt xstep and ystep until we find a wall
-    while (nextHX >= 0 && nextHX <= MAP_NUM_COLS * TILE_SIZE && nextHY >= 0 && nextHY <= MAP_NUM_ROWS * TILE_SIZE) {
+    //while (nextHX >= 0 && nextHX <= MAP_NUM_COLS * TILE_SIZE && nextHY >= 0 && nextHY <= MAP_NUM_ROWS * TILE_SIZE) {
+    while (IsInsideMap(nextHX, nextHY)) {
         float XCheck = nextHX;
         float YCheck = nextHY + (IsRayFacingUp ? -1 : 0);
         
@@ -246,7 +221,7 @@ void CastRay(float RayAngle, int StripId) {
             // There is a wall hit.
             wallHitX_horizontal = nextHX;
             wallHitY_horizontal = nextHY;
-            HorizontalWallContent = Map[(int)floor(YCheck / TILE_SIZE)][(int)floor(XCheck / TILE_SIZE)];
+            HorizontalWallContent = GetMapAt((int)floor(YCheck / TILE_SIZE), (int)floor(XCheck / TILE_SIZE));
             foundHWallHit = true;
             break;
         } else {
@@ -283,7 +258,8 @@ void CastRay(float RayAngle, int StripId) {
     float nextVY = yintercept;
 
     // Inceremnt xstep and ystep until we find a wall
-    while (nextVX >= 0 && nextVX <= MAP_NUM_COLS * TILE_SIZE && nextVY >= 0 && nextVY <= MAP_NUM_ROWS * TILE_SIZE) {
+    //while (nextVX >= 0 && nextVX <= MAP_NUM_COLS * TILE_SIZE && nextVY >= 0 && nextVY <= MAP_NUM_ROWS * TILE_SIZE) {
+    while (IsInsideMap(nextVX, nextVY)) {
         float XCheck = nextVX + (IsRayFacingLeft ? -1 : 0);
         float YCheck = nextVY;
         
@@ -291,7 +267,7 @@ void CastRay(float RayAngle, int StripId) {
             // There is a wall hit.
             wallHitX_vertical = nextVX;
             wallHitY_vertical = nextVY;
-            VerticalWallContent = Map[(int)floor(YCheck / TILE_SIZE)][(int)floor(XCheck / TILE_SIZE)];
+            VerticalWallContent = GetMapAt((int)floor(YCheck / TILE_SIZE), (int)floor(XCheck / TILE_SIZE));
             foundVWallHit = true;
             break;
         } else {
@@ -338,26 +314,6 @@ void CastAllRays(void) {
 }
 
 
-void RenderMap(void) {
-//    for (int i = 0; i < MAP_NUM_ROWS; i++) {
-//        for (int j = 0; j < MAP_NUM_COLS; j++) {
-//            int TileX = j * TILE_SIZE;
-//            int TileY = i * TILE_SIZE;
-//            int TileColor = Map[i][j] != 0 ? 255 : 0;
-//
-//            SDL_SetRenderDrawColor(Renderer, TileColor, TileColor, TileColor, 255);
-//
-//            SDL_Rect MapTileRect = {
-//                TileX * MINIMAP_SCALE_FACTOR,
-//                TileY * MINIMAP_SCALE_FACTOR,
-//                TILE_SIZE * MINIMAP_SCALE_FACTOR,
-//                TILE_SIZE * MINIMAP_SCALE_FACTOR
-//            };
-//
-//            SDL_RenderFillRect(Renderer, &MapTileRect);
-//        }
-//    }
-}
 
 
 void RenderRays(void) {
@@ -511,15 +467,36 @@ void RenderColorBuffer(void) {
 }
 
 
+void RenderMap(void) {
+    for (int i = 0; i < MAP_NUM_ROWS; i++) {
+        for (int j = 0; j < MAP_NUM_COLS; j++) {
+            int TileX = j * TILE_SIZE;
+            int TileY = i * TILE_SIZE;
+            uint32_t TileColor = GetMapAt(i, j) != 0 ? 0xffffffff : 0xff000000;
+            
+            DrawRectangle(
+                          TileX * MINIMAP_SCALE_FACTOR,
+                          TileY * MINIMAP_SCALE_FACTOR,
+                          TILE_SIZE * MINIMAP_SCALE_FACTOR,
+                          TILE_SIZE * MINIMAP_SCALE_FACTOR,
+                          TileColor,
+                          WINDOW_W
+                          );
+        }
+    }
+}
+
+
 void Render(void) {
     ClearColorBuffer(0xff000000, WINDOW_W, WINDOW_H);
     RenderWallProjection();
-    RenderColorBuffer();
     
     // Render minimap.
-//    RenderMap();
+    RenderMap();
 //    RenderRays();
 //    RenderPlayer();
+    
+    RenderColorBuffer();
 }
 
 void ReleaseResources(void) {
