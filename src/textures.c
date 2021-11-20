@@ -2,8 +2,8 @@
 #include "textures.h"
 
 static const char* TexturesPaths[NUM_TEXTURES] = {
-    "./data/textures/debug_grid.png",
-    "./data/textures/debug_grid_pattern.png"
+    "./data/textures/bricks.png",
+    "./data/textures/stone.png"
 };
 
 // Hold all textures neccessary in game.

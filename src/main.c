@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "consts.h"
 #include "textures.h"
+#include "graphics.h"
 
 
 //
@@ -64,7 +65,6 @@ SDL_Renderer* Renderer = NULL;
 bool IsGameRunning = false;
 int TicksLastFrame = 0;
 
-uint32_t* ColorBuffer = NULL;
 SDL_Texture* ColorBufferTexture = NULL;
 
 bool InitializeWindow(void) {
@@ -108,9 +108,7 @@ bool InitializeWindow(void) {
 }
 
 void DestroyWindow(void) {
-    FreeTextures();
-    
-    free(ColorBuffer);
+    DestroyColorBuffer();
     SDL_DestroyTexture(ColorBufferTexture);
     
     SDL_DestroyRenderer(Renderer);
@@ -131,7 +129,7 @@ void Setup(void) {
     Player.TurnSpeed = 85 * (PI / 180);
     
     // Allocate color buffer here
-    ColorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * (uint32_t)WINDOW_W * (uint32_t)WINDOW_H);
+    CreateColorBuffer(WINDOW_W, WINDOW_H);
     
     // Create color buffer texture for SDL.
     ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
@@ -167,22 +165,22 @@ void MovePlayer(float DeltaTime) {
 
 
 void RenderPlayer(void) {
-    SDL_SetRenderDrawColor(Renderer, 255, 255, 255, 255);
-    SDL_Rect PlayerRect = {
-        Player.X * MINIMAP_SCALE_FACTOR,
-        Player.Y * MINIMAP_SCALE_FACTOR,
-        Player.Width * MINIMAP_SCALE_FACTOR,
-        Player.Height * MINIMAP_SCALE_FACTOR
-    };
-
-    SDL_RenderFillRect(Renderer, &PlayerRect);
-
-    SDL_RenderDrawLine( Renderer,
-                        MINIMAP_SCALE_FACTOR * Player.X,
-                        MINIMAP_SCALE_FACTOR * Player.Y,
-                        MINIMAP_SCALE_FACTOR * Player.X + cos(Player.RotationAngle) * 40,
-                        MINIMAP_SCALE_FACTOR * Player.Y + sin(Player.RotationAngle) * 40
-                        );
+//    SDL_SetRenderDrawColor(Renderer, 255, 255, 255, 255);
+//    SDL_Rect PlayerRect = {
+//        Player.X * MINIMAP_SCALE_FACTOR,
+//        Player.Y * MINIMAP_SCALE_FACTOR,
+//        Player.Width * MINIMAP_SCALE_FACTOR,
+//        Player.Height * MINIMAP_SCALE_FACTOR
+//    };
+//
+//    SDL_RenderFillRect(Renderer, &PlayerRect);
+//
+//    SDL_RenderDrawLine( Renderer,
+//                        MINIMAP_SCALE_FACTOR * Player.X,
+//                        MINIMAP_SCALE_FACTOR * Player.Y,
+//                        MINIMAP_SCALE_FACTOR * Player.X + cos(Player.RotationAngle) * 40,
+//                        MINIMAP_SCALE_FACTOR * Player.Y + sin(Player.RotationAngle) * 40
+//                        );
 }
 
 float NormalizeAngle(float Angle) {
@@ -341,37 +339,37 @@ void CastAllRays(void) {
 
 
 void RenderMap(void) {
-    for (int i = 0; i < MAP_NUM_ROWS; i++) {
-        for (int j = 0; j < MAP_NUM_COLS; j++) {
-            int TileX = j * TILE_SIZE;
-            int TileY = i * TILE_SIZE;
-            int TileColor = Map[i][j] != 0 ? 255 : 0;
-
-            SDL_SetRenderDrawColor(Renderer, TileColor, TileColor, TileColor, 255);
-
-            SDL_Rect MapTileRect = {
-                TileX * MINIMAP_SCALE_FACTOR,
-                TileY * MINIMAP_SCALE_FACTOR,
-                TILE_SIZE * MINIMAP_SCALE_FACTOR,
-                TILE_SIZE * MINIMAP_SCALE_FACTOR
-            };
-
-            SDL_RenderFillRect(Renderer, &MapTileRect);
-        }
-    }
+//    for (int i = 0; i < MAP_NUM_ROWS; i++) {
+//        for (int j = 0; j < MAP_NUM_COLS; j++) {
+//            int TileX = j * TILE_SIZE;
+//            int TileY = i * TILE_SIZE;
+//            int TileColor = Map[i][j] != 0 ? 255 : 0;
+//
+//            SDL_SetRenderDrawColor(Renderer, TileColor, TileColor, TileColor, 255);
+//
+//            SDL_Rect MapTileRect = {
+//                TileX * MINIMAP_SCALE_FACTOR,
+//                TileY * MINIMAP_SCALE_FACTOR,
+//                TILE_SIZE * MINIMAP_SCALE_FACTOR,
+//                TILE_SIZE * MINIMAP_SCALE_FACTOR
+//            };
+//
+//            SDL_RenderFillRect(Renderer, &MapTileRect);
+//        }
+//    }
 }
 
 
 void RenderRays(void) {
-    SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
-    
-    for (int i=0; i < NUM_RAYS; ++i) {
-        SDL_RenderDrawLine(Renderer,
-                           MINIMAP_SCALE_FACTOR * Player.X,
-                           MINIMAP_SCALE_FACTOR * Player.Y,
-                           MINIMAP_SCALE_FACTOR * Rays[i].WallHitX,
-                           MINIMAP_SCALE_FACTOR * Rays[i].WallHitY);
-    }
+//    SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
+//
+//    for (int i=0; i < NUM_RAYS; ++i) {
+//        SDL_RenderDrawLine(Renderer,
+//                           MINIMAP_SCALE_FACTOR * Player.X,
+//                           MINIMAP_SCALE_FACTOR * Player.Y,
+//                           MINIMAP_SCALE_FACTOR * Rays[i].WallHitX,
+//                           MINIMAP_SCALE_FACTOR * Rays[i].WallHitY);
+//    }
 }
 
 
@@ -446,7 +444,7 @@ void Update(void) {
     CastAllRays();
 }
 
-void Generate3DProjection(void) {
+void RenderWallProjection(void) {
     for (int x=0; x < NUM_RAYS; x++) {
         float PerpendicularDistance = Rays[x].Distance * cos(Rays[x].RayAngle - Player.RotationAngle);
         
@@ -463,7 +461,7 @@ void Generate3DProjection(void) {
         
         // Color for ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            ColorBuffer[(WINDOW_W * y) + x] = 0xffcccccc;
+            WriteColorBuffer(x, y, 0xff000000, WINDOW_W);
         }
         
         int32_t TextureOffsetX = 0;
@@ -495,47 +493,37 @@ void Generate3DProjection(void) {
             // Set color from sample texture.
             uint32_t TexelColor = TextureBuffer[(TextureW * TextureOffsetY) + TextureOffsetX];
             
-            ColorBuffer[(WINDOW_W * y) + x] = TexelColor;
+            WriteColorBuffer(x, y, TexelColor, WINDOW_W);
         }
         
         // Color for floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
-            ColorBuffer[(WINDOW_W * y) + x] = 0xff1e3a29;
+            WriteColorBuffer(x, y, 0xff131313, WINDOW_W);
         }
-    }
-}
-
-void ClearColorBuffer(uint32_t Color) {
-    for (int i = 0; i < WINDOW_W * WINDOW_H; ++i) {
-        ColorBuffer[i] = Color;
     }
 }
 
 
 void RenderColorBuffer(void) {
-    SDL_UpdateTexture(ColorBufferTexture, NULL, ColorBuffer, (int)((uint32_t)WINDOW_W * sizeof(uint32_t)));
+    SDL_UpdateTexture(ColorBufferTexture, NULL, GetColorBuffer(), (int)((uint32_t)WINDOW_W * sizeof(uint32_t)));
     SDL_RenderCopy(Renderer, ColorBufferTexture, NULL, NULL);
+    SDL_RenderPresent(Renderer);
 }
 
 
 void Render(void) {
-    SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
-    SDL_RenderClear(Renderer);
-    
-    Generate3DProjection();
-    
-    // Render scene to color buffer.
+    ClearColorBuffer(0xff000000, WINDOW_W, WINDOW_H);
+    RenderWallProjection();
     RenderColorBuffer();
-
-    // Clear the Color Buffer.
-    ClearColorBuffer(0xff000000);
     
     // Render minimap.
-    RenderMap();
-    RenderRays();
-    RenderPlayer();
+//    RenderMap();
+//    RenderRays();
+//    RenderPlayer();
+}
 
-    SDL_RenderPresent(Renderer);
+void ReleaseResources(void) {
+    FreeTextures();
 }
 
 
@@ -550,6 +538,7 @@ int main(void) {
         Render();
     }
 
+    ReleaseResources();
     DestroyWindow();
 
     return 0;
