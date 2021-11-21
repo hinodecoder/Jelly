@@ -87,54 +87,70 @@ void Setup(void) {
 void ProcessInput(void) {
     SDL_Event Event;
     SDL_PollEvent(&Event);
-
+    
     switch (Event.type) {
-    case SDL_QUIT:
-        IsGameRunning = false;
-        break;
-
-    case SDL_KEYDOWN:
-        if (Event.key.keysym.sym == SDLK_ESCAPE) {
+        case SDL_QUIT:
             IsGameRunning = false;
-        }
-
-        if (Event.key.keysym.sym == SDLK_UP) {
-            Player.WalkDirection = +1;
-        }
-
-        if (Event.key.keysym.sym == SDLK_DOWN) {
-            Player.WalkDirection = -1;
-        }
-
-        if (Event.key.keysym.sym == SDLK_LEFT) {
-            Player.TurnDirection = -1;
-        }
-
-        if (Event.key.keysym.sym == SDLK_RIGHT) {
-            Player.TurnDirection = +1;
-        }
-
-        break;
-
-    case SDL_KEYUP:
-        if (Event.key.keysym.sym == SDLK_UP) {
-            Player.WalkDirection = 0;
-        }
-
-        if (Event.key.keysym.sym == SDLK_DOWN) {
-            Player.WalkDirection = 0;
-        }
-
-        if (Event.key.keysym.sym == SDLK_LEFT) {
-            Player.TurnDirection = 0;
-        }
-
-        if (Event.key.keysym.sym == SDLK_RIGHT) {
-            Player.TurnDirection = 0;
-        }
-
-        break;
-
+            break;
+            
+        case SDL_KEYDOWN:
+            if (Event.key.keysym.sym == SDLK_ESCAPE) {
+                IsGameRunning = false;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_UP) {
+                Player.WalkDirection = +1;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_DOWN) {
+                Player.WalkDirection = -1;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_LEFT) {
+                Player.TurnDirection = -1;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_RIGHT) {
+                Player.TurnDirection = +1;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_a) {
+                Player.StrafeDirection = -1;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_d) {
+                Player.StrafeDirection = +1;
+            }
+            
+            break;
+            
+        case SDL_KEYUP:
+            if (Event.key.keysym.sym == SDLK_UP) {
+                Player.WalkDirection = 0;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_DOWN) {
+                Player.WalkDirection = 0;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_LEFT) {
+                Player.TurnDirection = 0;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_RIGHT) {
+                Player.TurnDirection = 0;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_a) {
+                Player.StrafeDirection = 0;
+            }
+            
+            if (Event.key.keysym.sym == SDLK_d) {
+                Player.StrafeDirection = 0;
+            }
+            
+            break;
+            
     }
 }
 

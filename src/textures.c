@@ -5,8 +5,8 @@
 #define NUM_TEXTURES 2
 
 static const char* TexturesPaths[NUM_TEXTURES] = {
-    "./data/textures/bricks.png",
-    "./data/textures/stone.png"
+    "./data/textures/DUNGEONBRICKS.png",
+    "./data/textures/DUNGEONCELL.png"
 };
 
 // Hold all textures neccessary in game.

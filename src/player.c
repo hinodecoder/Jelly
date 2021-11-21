@@ -11,6 +11,7 @@ player_t Player = {
     .TurnDirection = 0,
     .WalkDirection = 0,
     .RotationAngle = PI / 2,
+    .StrafeDirection = 0,
     .WalkSpeed = 200,
     .TurnSpeed = 85 * (PI / 180)
 };
@@ -19,6 +20,8 @@ void MovePlayer(float DeltaTime) {
     Player.RotationAngle += Player.TurnDirection * Player.TurnSpeed * DeltaTime;
     float MoveStep = Player.WalkDirection * Player.WalkSpeed * DeltaTime;
 
+    // TODO: Do strafing, use StrafeDirection
+    
     float NewPlayerX = Player.X + cos(Player.RotationAngle) * MoveStep;
     float NewPlayerY = Player.Y + sin(Player.RotationAngle) * MoveStep;
 

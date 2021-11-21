@@ -6,7 +6,7 @@
 #define PI 3.14159265
 #define TWO_PI 6.28318530
 
-#define TILE_SIZE 64
+#define TILE_SIZE 32 // Changed from 64 to 32 = looks better
 
 #define MINIMAP_SCALE_FACTOR 0.15
 
