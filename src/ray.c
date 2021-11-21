@@ -7,14 +7,12 @@
 
 ray_t Rays[NUM_RAYS];
 
-float NormalizeAngle(float Angle) {
-    Angle = remainder(Angle, TWO_PI);
+void NormalizeAngle(float* Angle) {
+    *Angle = remainder(*Angle, TWO_PI);
     
-    if (Angle < 0) {
-        Angle = TWO_PI + Angle;
+    if (*Angle < 0) {
+        *Angle = TWO_PI + *Angle;
     }
-    
-    return Angle;
 }
 
 float DistanceBetweenPoints(float X1, float Y1, float X2, float Y2) {
@@ -31,7 +29,7 @@ void CastAllRays(void) {
 void CastRay(float RayAngle, int StripId) {
     // TODO: implement crazy stuff
     
-    RayAngle = NormalizeAngle(RayAngle);
+    NormalizeAngle(&RayAngle);
     
     // Angle direction
     int IsRayFacingDown = RayAngle > 0 && RayAngle < PI;
