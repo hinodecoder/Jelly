@@ -188,7 +188,7 @@ void RenderWallProjection(void) {
         
         // Color for ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            WriteColorBuffer(x, y, 0xff000000, WINDOW_W);
+            WriteColorBuffer(x, y, 0xff000000);
         }
         
         int32_t TextureOffsetX = 0;
@@ -220,12 +220,12 @@ void RenderWallProjection(void) {
             // Set color from sample texture.
             uint32_t TexelColor = TextureBuffer[(TextureW * TextureOffsetY) + TextureOffsetX];
             
-            WriteColorBuffer(x, y, TexelColor, WINDOW_W);
+            WriteColorBuffer(x, y, TexelColor);
         }
         
         // Color for floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
-            WriteColorBuffer(x, y, 0xff131313, WINDOW_W);
+            WriteColorBuffer(x, y, 0xff131313);
         }
     }
 }
@@ -250,8 +250,7 @@ void RenderMap(void) {
                           TileY * MINIMAP_SCALE_FACTOR,
                           TILE_SIZE * MINIMAP_SCALE_FACTOR,
                           TILE_SIZE * MINIMAP_SCALE_FACTOR,
-                          TileColor,
-                          WINDOW_W
+                          TileColor
                           );
         }
     }
@@ -264,7 +263,7 @@ void Render(void) {
     
     // Render minimap.
     RenderMap();
-//    RenderRays();
+    RenderRays();
     RenderPlayer();
     
     RenderColorBuffer();

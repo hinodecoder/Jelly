@@ -1,6 +1,9 @@
 #include "ray.h"
 #include "player.h"
 #include "map.h"
+#include "graphics.h"
+
+#define RAYS_RENDERING_DENSITY 30
 
 ray_t Rays[NUM_RAYS];
 
@@ -160,13 +163,12 @@ void CastRay(float RayAngle, int StripId) {
 }
 
 void RenderRays(void) {
-//    SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
-//
-//    for (int i=0; i < NUM_RAYS; ++i) {
-//        SDL_RenderDrawLine(Renderer,
-//                           MINIMAP_SCALE_FACTOR * Player.X,
-//                           MINIMAP_SCALE_FACTOR * Player.Y,
-//                           MINIMAP_SCALE_FACTOR * Rays[i].WallHitX,
-//                           MINIMAP_SCALE_FACTOR * Rays[i].WallHitY);
-//    }
+    for (int i=0; i < NUM_RAYS; i += RAYS_RENDERING_DENSITY) {
+        DrawLine(
+                 MINIMAP_SCALE_FACTOR * Player.X,
+                 MINIMAP_SCALE_FACTOR * Player.Y,
+                 MINIMAP_SCALE_FACTOR * Rays[i].WallHitX,
+                 MINIMAP_SCALE_FACTOR * Rays[i].WallHitY,
+                 0xff0000ff);
+    }
 }
