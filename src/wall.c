@@ -1,5 +1,7 @@
 #include "wall.h"
 
+#define WALL_SHADOW_FACTOR 0.7f
+
 void RenderWallProjection(void) {
     for (int x=0; x < NUM_RAYS; x++) {
         float PerpendicularDistance = Rays[x].Distance * cos(Rays[x].RayAngle - Player.RotationAngle);
@@ -48,6 +50,11 @@ void RenderWallProjection(void) {
             
             // Set color from sample texture.
             uint32_t TexelColor = TextureBuffer[(TextureW * TextureOffsetY) + TextureOffsetX];
+            
+            if (Rays[x].WasHitVertical) {
+                // TODO: Maybe use different textures? In case we need optimization (a little).
+                ChangeColorIntensity(&TexelColor, WALL_SHADOW_FACTOR);
+            }
             
             WriteColorBuffer(x, y, TexelColor);
         }

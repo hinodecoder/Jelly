@@ -11,4 +11,6 @@ void DrawLine(int32_t X0, int32_t Y0, int32_t X1, int32_t Y1, uint32_t Color);
 void ClearColorBuffer(uint32_t Color, uint32_t Width, uint32_t Height);
 void DestroyColorBuffer(void);
 
+void ChangeColorIntensity(uint32_t* Color, float Factor);
+
 #endif /* GRAPHICS_H */

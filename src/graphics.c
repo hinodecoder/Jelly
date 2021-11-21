@@ -68,3 +68,12 @@ void ClearColorBuffer(uint32_t Color, uint32_t Width, uint32_t Height) {
 void DestroyColorBuffer(void) {
     free(ColorBuffer);
 }
+
+void ChangeColorIntensity(uint32_t* Color, float Factor) {
+    uint32_t A = (*Color & 0xFF000000);
+    uint32_t R = (*Color & 0x00FF0000) * Factor;
+    uint32_t G = (*Color & 0x0000FF00) * Factor;
+    uint32_t B = (*Color & 0x000000FF) * Factor;
+    
+    *Color = A | (R & 0x00FF0000) | (G & 0x0000FF00) | (B & 0x000000FF);
+}
