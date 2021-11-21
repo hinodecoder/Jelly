@@ -8,7 +8,7 @@
 
 #define TILE_SIZE 32 // Changed from 64 to 32 = looks better
 
-#define MINIMAP_SCALE_FACTOR 0.65
+#define MINIMAP_SCALE_FACTOR 0.25
 
 #define WINDOW_W 1280
 #define WINDOW_H 800
