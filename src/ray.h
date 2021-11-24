@@ -22,6 +22,6 @@ void NormalizeAngle(float* Angle);
 float DistanceBetweenPoints(float X1, float Y1, float X2, float Y2);
 void CastRay(float RayAngle, int StripId);
 void CastAllRays(void);
-void RenderRays(void);
+void RenderMapRays(void);
 
 #endif

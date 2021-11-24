@@ -9,15 +9,15 @@
 #include "ray.h"
 #include "player.h"
 #include "wall.h"
-
-
+#include "sprite.h"
+// ________________________________________________________________________________________
 SDL_Window* Window = NULL;
 SDL_Renderer* Renderer = NULL;
 bool IsGameRunning = false;
 int TicksLastFrame = 0;
-
+// ________________________________________________________________________________________
 SDL_Texture* ColorBufferTexture = NULL;
-
+// ________________________________________________________________________________________
 bool InitializeWindow(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         fprintf(stderr, "Error initializing SDL.\n");
@@ -57,7 +57,7 @@ bool InitializeWindow(void) {
 
     return true;
 }
-
+// ________________________________________________________________________________________
 void DestroyWindow(void) {
     DestroyColorBuffer();
     SDL_DestroyTexture(ColorBufferTexture);
@@ -66,8 +66,7 @@ void DestroyWindow(void) {
     SDL_DestroyWindow(Window);
     SDL_Quit();
 }
-
-
+// ________________________________________________________________________________________
 void Setup(void) {
     // Allocate color buffer here
     CreateColorBuffer(WINDOW_W, WINDOW_H);
@@ -77,13 +76,7 @@ void Setup(void) {
     
     LoadTextures();
 }
-
-
-
-
-
-
-
+// ________________________________________________________________________________________
 void ProcessInput(void) {
     SDL_Event Event;
     SDL_PollEvent(&Event);
@@ -153,8 +146,7 @@ void ProcessInput(void) {
             
     }
 }
-
-
+// ________________________________________________________________________________________
 void Update(void) {
     int TimeToWait = FRAME_TIME_LENGTH - (SDL_GetTicks() - TicksLastFrame);
 
@@ -170,18 +162,14 @@ void Update(void) {
     MovePlayer(DeltaTime);
     CastAllRays();
 }
-
-
-
-
+// ________________________________________________________________________________________
 void RenderColorBuffer(void) {
     SDL_UpdateTexture(ColorBufferTexture, NULL, GetColorBuffer(), (int)((uint32_t)WINDOW_W * sizeof(uint32_t)));
     SDL_RenderCopy(Renderer, ColorBufferTexture, NULL, NULL);
     SDL_RenderPresent(Renderer);
 }
-
-
-void RenderMap(void) {
+// ________________________________________________________________________________________
+void RenderMapGrid(void) {
     for (int i = 0; i < MAP_NUM_ROWS; i++) {
         for (int j = 0; j < MAP_NUM_COLS; j++) {
             int TileX = j * TILE_SIZE;
@@ -198,26 +186,27 @@ void RenderMap(void) {
         }
     }
 }
-
-
+// ________________________________________________________________________________________
 void Render(void) {
     ClearColorBuffer(0xff000000, WINDOW_W, WINDOW_H);
     
+    // Render projection of sprites and walls.
     RenderWallProjection();
+    RenderSpriteProjection();
     
-    // Render minimap.
-    RenderMap();
-    RenderRays();
-    RenderPlayer();
+    // Render minimap objects.
+    RenderMapGrid();
+    RenderMapRays();
+    RenderMapSprites();
+    RenderMapPlayer();
     
     RenderColorBuffer();
 }
-
+// ________________________________________________________________________________________
 void ReleaseResources(void) {
     FreeTextures();
 }
-
-
+// ________________________________________________________________________________________
 int main(void) {
     IsGameRunning = InitializeWindow();
 
@@ -234,3 +223,4 @@ int main(void) {
 
     return EXIT_SUCCESS;
 }
+// ________________________________________________________________________________________

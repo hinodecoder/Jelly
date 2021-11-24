@@ -160,7 +160,7 @@ void CastRay(float RayAngle, int StripId) {
     
 }
 
-void RenderRays(void) {
+void RenderMapRays(void) {
     for (int i=0; i < NUM_RAYS; i += RAYS_RENDERING_DENSITY) {
         DrawLine(
                  MINIMAP_SCALE_FACTOR * Player.X,

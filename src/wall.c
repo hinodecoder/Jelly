@@ -4,20 +4,19 @@
 
 void RenderWallProjection(void) {
     for (int x=0; x < NUM_RAYS; x++) {
+        // Calculate perpendicular distance to avoid fish-eye effect (distortion).
         float PerpendicularDistance = Rays[x].Distance * cos(Rays[x].RayAngle - Player.RotationAngle);
         
-        float ProjectedWallHeight = (TILE_SIZE / PerpendicularDistance) * DISTANCE_TO_PROJECTION_PLANE;
+        // Calculate projected wall height.
+        float WallHeight = (TILE_SIZE / PerpendicularDistance) * DISTANCE_TO_PROJECTION_PLANE;
         
-        // TODO: Replace, duplicate variable
-        int WallStripHeight = ProjectedWallHeight;
-        
-        int WallTopPixel = (WINDOW_H / 2) - (WallStripHeight / 2);
+        int WallTopPixel = (WINDOW_H / 2) - (WallHeight / 2);
         WallTopPixel = WallTopPixel < 0 ? 0 : WallTopPixel;
         
-        int WallBottomPixel = (WINDOW_H / 2) + (WallStripHeight / 2);
+        int WallBottomPixel = (WINDOW_H / 2) + (WallHeight / 2);
         WallBottomPixel = WallBottomPixel > WINDOW_H ? WINDOW_H : WallBottomPixel;
         
-        // Color for ceiling.
+        // Draw ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
             WriteColorBuffer(x, y, 0xff000000);
         }
@@ -42,24 +41,23 @@ void RenderWallProjection(void) {
         for (int y = WallTopPixel; y < WallBottomPixel; ++y) {
             // NOTE: Calculate distance from top because we do clamping on top pixel height and it
             // distorts our view while mapping a texture.
-            int32_t DistanceFromTop = (y + WallStripHeight * 0.5f) - (WINDOW_H * 0.5f);
+            int32_t DistanceFromTop = (y + WallHeight * 0.5f) - (WINDOW_H * 0.5f);
             
             // NOTE: Calculating texture offset in Y but we need to take "perspective" into consideration.
-            // To calculate it we need overall wall height (wall strip height).
-            int32_t TextureOffsetY = DistanceFromTop * ((float)TextureH / WallStripHeight);
+            // To calculate it we need overall wall height.
+            int32_t TextureOffsetY = DistanceFromTop * ((float)TextureH / WallHeight);
             
             // Set color from sample texture.
             uint32_t TexelColor = TextureBuffer[(TextureW * TextureOffsetY) + TextureOffsetX];
             
             if (Rays[x].WasHitVertical) {
-                // TODO: Maybe use different textures? In case we need optimization (a little).
                 ChangeColorIntensity(&TexelColor, WALL_SHADOW_FACTOR);
             }
             
             WriteColorBuffer(x, y, TexelColor);
         }
         
-        // Color for floor.
+        // Draw floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
             WriteColorBuffer(x, y, 0xff131313);
         }

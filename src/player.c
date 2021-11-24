@@ -31,7 +31,7 @@ void MovePlayer(float DeltaTime) {
     }
 }
 
-void RenderPlayer(void) {
+void RenderMapPlayer(void) {
     DrawRectangle(
                   Player.X * MINIMAP_SCALE_FACTOR,
                   Player.Y * MINIMAP_SCALE_FACTOR,

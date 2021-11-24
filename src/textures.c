@@ -2,17 +2,25 @@
 #include "textures.h"
 
 
-#define NUM_TEXTURES 2
+#define NUM_TEXTURES 6
 
 static const char* TexturesPaths[NUM_TEXTURES] = {
-    "./data/textures/DUNGEONBRICKS.png",
-    "./data/textures/DUNGEONCELL.png"
+    /*0*/"./data/textures/DUNGEONBRICKS.png",
+    /*1*/"./data/textures/DUNGEONCELL.png",
+    /*2*/"./data/sprites/barrel.png",
+    /*3*/"./data/sprites/light.png",
+    /*4*/"./data/sprites/table.png",
+    /*5*/"./data/sprites/guard.png"
 };
 
 // Hold all textures neccessary in game.
 texture_t Textures[NUM_TEXTURES];
 
 
+// TODO: Later on I need to get rid of upng somehow and use only my texture_t struct.
+// Why? To have less dependencies. When I will be doing some porting code: I want to
+// have as little dependencies as I can have. No UPNG, no SDL etc. But for now let's
+// let it as it is.
 upng_t* UPNGLoadedTextures[NUM_TEXTURES] = {NULL};
 
 void LoadTextures(void) {
@@ -30,7 +38,7 @@ void LoadTextures(void) {
                 Textures[i].Buffer = (uint32_t*) upng_get_buffer(Upng);
                 UPNGLoadedTextures[i] = Upng;
             } else {
-                // TODO: add assert here
+                // TODO: add assert here and some warning messages
                 printf("Cannot load texture %s\n", TexturesPaths[i]);
             }
         }

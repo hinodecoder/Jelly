@@ -8,12 +8,13 @@
 
 #define TILE_SIZE 32 // Changed from 64 to 32 = looks better
 
-#define MINIMAP_SCALE_FACTOR 0.25
+#define MINIMAP_SCALE_FACTOR 0.35
 
 #define WINDOW_W 1280
 #define WINDOW_H 800
 
 #define FOV_ANGLE (60 * (PI / 180))
+#define FOV_HALF_ANGLE FOV_ANGLE/2
 
 #define NUM_RAYS WINDOW_W
 
