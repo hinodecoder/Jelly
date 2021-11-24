@@ -3,6 +3,7 @@
 #include "player.h"
 #include "textures.h"
 #include "consts.h"
+#include "math.h"
 // ________________________________________________________________________
 #define NUM_SPRITES 2
 static sprite_t Sprites[NUM_SPRITES] = {
@@ -42,6 +43,8 @@ void RenderSpriteProjection(void) {
         // If sprite is in field of view of a player then add it to render array.
         if (AngleToSprite < FOV_HALF_ANGLE) {
             CurrentSprite->IsVisible = true;
+            CurrentSprite->Angle = AngleToSprite;
+            CurrentSprite->Distance = DistanceBetweenPoints(CurrentSprite->X, CurrentSprite->Y, Player.X, Player.Y);
             VisibleSprites[NumberOfVisibleSprites] = CurrentSprite;
             NumberOfVisibleSprites++;
         }
@@ -51,6 +54,9 @@ void RenderSpriteProjection(void) {
     }
 
     // Draw the projected sprites.
+    for (int32_t i=0; i < NumberOfVisibleSprites; ++i) {
+        // Draw sprite.
+    }
 }
 // ________________________________________________________________________
 void RenderMapSprites(void) {

@@ -2,6 +2,7 @@
 #include "consts.h"
 #include "map.h"
 #include "graphics.h"
+#include "math.h"
 
 player_t Player = {
     .X = 4 * TILE_SIZE,
@@ -18,6 +19,8 @@ player_t Player = {
 
 void MovePlayer(float DeltaTime) {
     Player.RotationAngle += Player.TurnDirection * Player.TurnSpeed * DeltaTime;
+    // Important thing to do: always normalize rotation angle!
+    NormalizeAngle(&Player.RotationAngle);
     float MoveStep = Player.WalkDirection * Player.WalkSpeed * DeltaTime;
 
     // TODO: Do strafing, use StrafeDirection
