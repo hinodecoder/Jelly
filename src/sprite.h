@@ -9,6 +9,7 @@ typedef struct {
     float Y;
     float Distance;
     float Angle;
+    float Scale;
     int32_t TextureId;
     bool IsVisible;
 } sprite_t;

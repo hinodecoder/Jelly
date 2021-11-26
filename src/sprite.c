@@ -13,18 +13,21 @@ static sprite_t Sprites[NUM_SPRITES] = {
     .X = 320,
     .Y = 315,
     .TextureId = 2,
+    .Scale = 0.3f,
     .IsVisible = false
     },
     {
     .X = 275,
     .Y = 315,
     .TextureId = 3,
+    .Scale = 0.5f,
     .IsVisible = false
     },
     {
     .X = 290,
     .Y = 315,
     .TextureId = 3,
+    .Scale = 0.5f,
     .IsVisible = false
     }
 };
@@ -88,6 +91,10 @@ void RenderSpriteProjection(void) {
         // Calculate sprite projected height. Width is the same as height (32x32, 64x64).
         float SpriteHeight = (TILE_SIZE / PerpendicularDistance) * DISTANCE_TO_PROJECTION_PLANE;
         float SpriteWidth = SpriteHeight;
+
+        // TODO: Test scaling and implement proper offset
+        SpriteWidth *= CurrentSprite->Scale;
+        SpriteHeight *= CurrentSprite->Scale;
 
         // Top pixel coords calculation.
         float SpriteTopPixel = (WINDOW_H / 2) - (SpriteHeight / 2);
