@@ -30,8 +30,8 @@ bool InitializeWindow(void) {
     //int32_t DisplayWidth = DisplayMode.w;
     //int32_t DisplayHeight = DisplayMode.h;
 
-    int32_t DisplayWidth = WINDOW_W;
-    int32_t DisplayHeight = WINDOW_H;
+    int32_t DisplayWidth = 1280;
+    int32_t DisplayHeight = 800;
     
     Window = SDL_CreateWindow( NULL,
                                SDL_WINDOWPOS_CENTERED,
@@ -108,11 +108,11 @@ void ProcessInput(void) {
             }
             
             if (Event.key.keysym.sym == SDLK_a) {
-                Player.StrafeDirection = -1;
+                Player.StrafeDirection = 1;
             }
             
             if (Event.key.keysym.sym == SDLK_d) {
-                Player.StrafeDirection = +1;
+                Player.StrafeDirection = -1;
             }
             
             break;

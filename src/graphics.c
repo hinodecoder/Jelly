@@ -18,7 +18,7 @@ uint32_t* GetColorBuffer(void) {
     return ColorBuffer;
 }
 
-void WriteColorBuffer(int32_t X, int32_t Y, uint32_t Color) {
+void DrawPixel(int32_t X, int32_t Y, uint32_t Color) {
     // Just override data in memory. I don't check if index is valid. This should be straight forward func.
     ColorBuffer[(BufferWidth * Y) + X] = Color;
 }
@@ -26,7 +26,7 @@ void WriteColorBuffer(int32_t X, int32_t Y, uint32_t Color) {
 void DrawRectangle(int32_t X, int32_t Y, int32_t Width, int32_t Height, uint32_t Color) {
     for (int32_t i=X; i <= (X + Width); ++i) {
         for (int32_t j=Y; j <= (Y + Height); j++) {
-            WriteColorBuffer(i, j, Color);
+            DrawPixel(i, j, Color);
         }
     }
 }
@@ -51,7 +51,7 @@ void DrawLine(int32_t X0, int32_t Y0, int32_t X1, int32_t Y1, uint32_t Color) {
         const float RoundedCurrentY = round(CurrentY);
         
         if (RoundedCurrentX >= 0 && RoundedCurrentY >= 0) {
-            WriteColorBuffer(RoundedCurrentX, RoundedCurrentY, Color); // TODO: slow?
+            DrawPixel(RoundedCurrentX, RoundedCurrentY, Color); // TODO: slow?
         }
         
         CurrentX += XIncrement;

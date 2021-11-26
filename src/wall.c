@@ -18,7 +18,7 @@ void RenderWallProjection(void) {
         
         // Draw ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            WriteColorBuffer(x, y, 0xff000000);
+            DrawPixel(x, y, 0xff000000);
         }
         
         int32_t TextureOffsetX = 0;
@@ -54,12 +54,12 @@ void RenderWallProjection(void) {
                 ChangeColorIntensity(&TexelColor, WALL_SHADOW_FACTOR);
             }
             
-            WriteColorBuffer(x, y, TexelColor);
+            DrawPixel(x, y, TexelColor);
         }
         
         // Draw floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
-            WriteColorBuffer(x, y, 0xff131313);
+            DrawPixel(x, y, 0xff131313);
         }
     }
 }

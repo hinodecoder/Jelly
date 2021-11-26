@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "player.h"
 #include "consts.h"
 #include "map.h"
@@ -21,10 +22,11 @@ void MovePlayer(float DeltaTime) {
     Player.RotationAngle += Player.TurnDirection * Player.TurnSpeed * DeltaTime;
     // Important thing to do: always normalize rotation angle!
     NormalizeAngle(&Player.RotationAngle);
-    float MoveStep = Player.WalkDirection * Player.WalkSpeed * DeltaTime;
 
     // TODO: Do strafing, use StrafeDirection
     
+    // Move player if there is no collision.
+    float MoveStep = Player.WalkDirection * Player.WalkSpeed * DeltaTime;
     float NewPlayerX = Player.X + cos(Player.RotationAngle) * MoveStep;
     float NewPlayerY = Player.Y + sin(Player.RotationAngle) * MoveStep;
 

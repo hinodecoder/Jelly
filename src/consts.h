@@ -5,6 +5,7 @@
 
 #define PI 3.14159265
 #define TWO_PI 6.28318530
+#define HALF_PI PI / 2
 
 #define TILE_SIZE 32 // Changed from 64 to 32 = looks better
 
