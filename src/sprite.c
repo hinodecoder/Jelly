@@ -81,8 +81,11 @@ void RenderSpriteProjection(void) {
     for (int32_t i=0; i < NumberOfVisibleSprites; ++i) {
         sprite_t* CurrentSprite = VisibleSprites[i];
 
+        // Calculate perpendicular distance to avoid fish-eye effect.
+        float PerpendicularDistance = CurrentSprite->Distance * cos(CurrentSprite->Angle);
+
         // Calculate sprite projected height. Width is the same as height (32x32, 64x64).
-        float SpriteHeight = (TILE_SIZE / CurrentSprite->Distance) * DISTANCE_TO_PROJECTION_PLANE;
+        float SpriteHeight = (TILE_SIZE / PerpendicularDistance) * DISTANCE_TO_PROJECTION_PLANE;
         float SpriteWidth = SpriteHeight;
 
         // Top pixel coords calculation.
