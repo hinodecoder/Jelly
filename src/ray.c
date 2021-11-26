@@ -135,14 +135,14 @@ void CastRay(float RayAngle, int StripId) {
         Rays[StripId].Distance = VerticalHitDistance;
         Rays[StripId].WallHitX = wallHitX_vertical;
         Rays[StripId].WallHitY = wallHitY_vertical;
-        Rays[StripId].WallHitContent = VerticalWallContent;
+        Rays[StripId].TextureId = VerticalWallContent;
         Rays[StripId].WasHitVertical = true;
         Rays[StripId].RayAngle = RayAngle;
     } else {
         Rays[StripId].Distance = HorizontalHitDistance;
         Rays[StripId].WallHitX = wallHitX_horizontal;
         Rays[StripId].WallHitY = wallHitY_horizontal;
-        Rays[StripId].WallHitContent = HorizontalWallContent;
+        Rays[StripId].TextureId = HorizontalWallContent;
         Rays[StripId].WasHitVertical = false;
         Rays[StripId].RayAngle = RayAngle;
     }

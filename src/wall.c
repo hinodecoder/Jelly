@@ -32,7 +32,7 @@ void RenderWallProjection(void) {
         
         
         // TODO: Add some null checks
-        texture_t* CurrentTexture = GetTexture(Rays[x].WallHitContent - 1);
+        texture_t* CurrentTexture = GetTexture(Rays[x].TextureId - 1);
         uint32_t* TextureBuffer = CurrentTexture->Buffer;
         const int32_t TextureW = CurrentTexture->Width;
         const int32_t TextureH = CurrentTexture->Height;

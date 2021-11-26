@@ -5,8 +5,9 @@
 #include "consts.h"
 #include "math.h"
 #include "ray.h"
-// ________________________________________________________________________
+
 #define NUM_SPRITES 3
+
 static sprite_t Sprites[NUM_SPRITES] = {
     {
     .X = 320,
@@ -27,7 +28,7 @@ static sprite_t Sprites[NUM_SPRITES] = {
     .IsVisible = false
     }
 };
-// ________________________________________________________________________
+
 void RenderSpriteProjection(void) {
     // Store all visible sprites to render.
     sprite_t* VisibleSprites[NUM_SPRITES] = {};
@@ -137,7 +138,7 @@ void RenderSpriteProjection(void) {
         }
     }
 }
-// ________________________________________________________________________
+
 void RenderMapSprites(void) {
     for (int i=0; i < NUM_SPRITES; ++i) {
         sprite_t* CurrentSprite = &Sprites[i];
