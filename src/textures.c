@@ -7,8 +7,8 @@
 static const char* TexturesPaths[NUM_TEXTURES] = {
     /*0*/"./data/textures/DUNGEONBRICKS.png",
     /*1*/"./data/textures/DUNGEONCELL.png",
-    /*2*/"./data/sprites/CREAKYDOOR.png",
-    /*3*/"./data/sprites/BIGTRUNK.png"
+    /*2*/"./data/sprites/HEART.png",
+    /*3*/"./data/sprites/SKULL.png"
 };
 
 // Hold all textures neccessary in game.
