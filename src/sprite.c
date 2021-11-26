@@ -4,6 +4,7 @@
 #include "textures.h"
 #include "consts.h"
 #include "math.h"
+#include "ray.h"
 // ________________________________________________________________________
 #define NUM_SPRITES 3
 static sprite_t Sprites[NUM_SPRITES] = {
@@ -121,8 +122,11 @@ void RenderSpriteProjection(void) {
                     uint32_t* TextureBuffer = CurrentTexture->Buffer;
                     uint32_t TexelColor = TextureBuffer[(TextureWidth * TextureOffsetY) + TextureOffsetX];
 
+                    // Check if current pixel is behind a wall.
+                    const bool IsPixelBehindWall = CurrentSprite->Distance > Rays[x].Distance;
+
                     // Skip "magenta"
-                    if (TexelColor != 0xffff00ff) {
+                    if (TexelColor != 0xffff00ff && !IsPixelBehindWall) {
                         DrawPixel(x, y, TexelColor);
                     }
                 }
