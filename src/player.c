@@ -12,7 +12,7 @@ player_t Player = {
     .Width = 10,
     .Height = 10,
     .RotationAngle = 0,
-    .WalkSpeed = 100,
+    .WalkSpeed = 150,
     .TurnSpeed = 5 * (PI / 180)
 };
 
@@ -42,12 +42,18 @@ void MovePlayer(float DeltaTime) {
     int32_t StrafeDirection = 0;
     GetCurrentMoveData(&WalkDirection, &Turn, &StrafeDirection);
     
+    // ROTATION
+    // ___________________________________________
     // Rotate player based on turn value and speed.
-    Player.RotationAngle += Turn * Player.TurnSpeed * DeltaTime;
+    float RotationAmount = Turn * Player.TurnSpeed * DeltaTime;
+    RotationAmount = Clamp(RotationAmount, -Player.TurnSpeed, Player.TurnSpeed);
+    Player.RotationAngle += RotationAmount;
     
     // Important thing to do: always normalize rotation angle!
     NormalizeAngle(&Player.RotationAngle);
 
+    // MOVEMENT
+    // ___________________________________________
     // Calculate starfe direction.
     float StrafeX = cos(Player.RotationAngle + HALF_PI) * StrafeDirection;
     float StrafeY = sin(Player.RotationAngle + HALF_PI) * StrafeDirection;

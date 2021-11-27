@@ -20,3 +20,13 @@ void NormalizeVector2D(float *X, float *Y) {
         *Y /= Lenght;
     }
 }
+
+float Clamp(float Value, float Min, float Max) {
+    if (Value > Max) {
+        return Max;
+    }
+    if (Value < Min) {
+        return Min;
+    }
+    return Value;
+}

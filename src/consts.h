@@ -7,12 +7,12 @@
 #define TWO_PI 6.28318530
 #define HALF_PI PI / 2
 
-#define TILE_SIZE 32 // Changed from 64 to 32 = looks better
+#define TILE_SIZE 32
 
 #define MINIMAP_SCALE_FACTOR 0.35
 
-#define WINDOW_W 1280
-#define WINDOW_H 800
+#define WINDOW_W 800
+#define WINDOW_H 600
 
 #define FOV_ANGLE (60 * (PI / 180))
 #define FOV_HALF_ANGLE FOV_ANGLE/2

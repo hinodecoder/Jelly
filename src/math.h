@@ -4,5 +4,6 @@
 void NormalizeAngle(float* Angle);
 float DistanceBetweenPoints(float X1, float Y1, float X2, float Y2);
 void NormalizeVector2D(float *X, float *Y);
+float Clamp(float Value, float Min, float Max);
 
 #endif
