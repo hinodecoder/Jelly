@@ -17,6 +17,7 @@ SDL_Renderer* Renderer = NULL;
 bool IsGameRunning = false;
 int TicksLastFrame = 0;
 SDL_Texture* ColorBufferTexture = NULL;
+int32_t SHOW_CURSOR = 0;
 
 bool InitializeWindow(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -88,6 +89,10 @@ void ProcessAppInput(void) {
             }
             break;
     }
+    
+    SDL_ShowCursor(SHOW_CURSOR);
+    SDL_CaptureMouse(SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void Update(void) {
@@ -152,12 +157,12 @@ void ReleaseResources(void) {
 int main(void) {
     IsGameRunning = InitializeWindow();
 
-    InitKeyboard();
+    InitInput();
     Setup();
 
     while (IsGameRunning) {
         ProcessAppInput();
-        UpdateKeyboard();
+        UpdateInput();
         Update();
         Render();
     }

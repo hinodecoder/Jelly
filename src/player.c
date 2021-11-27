@@ -13,13 +13,13 @@ player_t Player = {
     .Height = 10,
     .RotationAngle = PI / 2,
     .WalkSpeed = 200,
-    .TurnSpeed = 85 * (PI / 180)
+    .TurnSpeed = 5 * (PI / 180)
 };
 
 void MovePlayer(float DeltaTime) {
     int32_t WalkDirection = 0;
-    int32_t TurnDirection = 0;
-    int32_t StrafeDirection = 0;
+    int32_t Turn = 0;
+    //int32_t StrafeDirection = 0;
     
     // Check if we can move in some direction.
     if (Keys[EKEY_UP]) {
@@ -29,15 +29,10 @@ void MovePlayer(float DeltaTime) {
         WalkDirection = -1;
     }
     
-    // Check if we can rotate.
-    if (Keys[EKEY_LEFT]) {
-        TurnDirection = -1;
-    }
-    else if (Keys[EKEY_RIGHT]) {
-        TurnDirection = 1;
-    }
-    
-    Player.RotationAngle += TurnDirection * Player.TurnSpeed * DeltaTime;
+    // Check turn.
+    Turn = MouseState.DeltaX;
+   
+    Player.RotationAngle += Turn * Player.TurnSpeed * DeltaTime;
     
     // Important thing to do: always normalize rotation angle!
     NormalizeAngle(&Player.RotationAngle);
