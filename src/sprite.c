@@ -6,31 +6,21 @@
 #include "math.h"
 #include "ray.h"
 
-#define NUM_SPRITES 3
+sprite_t Sprites[NUM_SPRITES];
 
-static sprite_t Sprites[NUM_SPRITES] = {
-    {
-    .X = 320,
-    .Y = 315,
-    .TextureId = 2,
-    .Scale = 0.3f,
-    .IsVisible = false
-    },
-    {
-    .X = 275,
-    .Y = 315,
-    .TextureId = 3,
-    .Scale = 0.5f,
-    .IsVisible = false
-    },
-    {
-    .X = 290,
-    .Y = 315,
-    .TextureId = 3,
-    .Scale = 0.5f,
-    .IsVisible = false
+void InitializeSprites(void) {
+    for (int i=0; i < NUM_SPRITES; ++i) {
+        sprite_t* CurrentSprite = &Sprites[i];
+        CurrentSprite->X = -1;
+        CurrentSprite->Y = -1;
+        CurrentSprite->TextureId = -1;
+        CurrentSprite->Angle = 0;
+        CurrentSprite->Distance = -1;
+        CurrentSprite->IsVisible = false;
+        CurrentSprite->Scale = 1;
+        CurrentSprite->Empty = true;
     }
-};
+}
 
 void RenderSpriteProjection(void) {
     // Store all visible sprites to render.
@@ -40,6 +30,12 @@ void RenderSpriteProjection(void) {
     // Brute-force check all sprites to be rendered or not.
     for (int32_t i=0; i < NUM_SPRITES; ++i) {
         sprite_t* CurrentSprite = &Sprites[i];
+        
+        // Skip uninitialised sprite.
+        if (CurrentSprite->Empty) {
+            continue;
+        }
+        
         float AngleToSprite = Player.RotationAngle - atan2(CurrentSprite->Y - Player.Y, CurrentSprite->X - Player.X);
 
         // Clamp angle to be 0-180.

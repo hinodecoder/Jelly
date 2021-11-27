@@ -1,6 +1,6 @@
 #include "wall.h"
 
-#define WALL_SHADOW_FACTOR 0.7f
+#define WALL_SHADOW_FACTOR 0.6f
 
 void RenderWallProjection(void) {
     for (int x=0; x < NUM_RAYS; x++) {

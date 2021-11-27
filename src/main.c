@@ -76,6 +76,9 @@ void Setup(void) {
     ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
     
     LoadTextures();
+    InitializeSprites();
+    
+    LoadMap("./data/maps/Test.png");
 }
 
 void ProcessAppInput(void) {
@@ -142,10 +145,10 @@ void Render(void) {
     RenderSpriteProjection();
     
     // Render minimap objects.
-//    RenderMapGrid();
-//    RenderMapRays();
-//    RenderMapSprites();
-//    RenderMapPlayer();
+    RenderMapGrid();
+    RenderMapRays();
+    RenderMapSprites();
+    RenderMapPlayer();
     
     RenderColorBuffer();
 }

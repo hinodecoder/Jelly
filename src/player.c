@@ -7,11 +7,11 @@
 #include "input.h"
 
 player_t Player = {
-    .X = 4 * TILE_SIZE,
-    .Y = 5 * TILE_SIZE,
+    .X = 5 * TILE_SIZE,
+    .Y = 2 * TILE_SIZE,
     .Width = 10,
     .Height = 10,
-    .RotationAngle = 0,
+    .RotationAngle = -HALF_PI,
     .WalkSpeed = 150,
     .TurnSpeed = 5 * (PI / 180)
 };
