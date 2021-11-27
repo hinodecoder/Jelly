@@ -12,3 +12,11 @@ void NormalizeAngle(float* Angle) {
 float DistanceBetweenPoints(float X1, float Y1, float X2, float Y2) {
     return sqrtf((X2 - X1) * (X2 - X1) + (Y2 - Y1) * (Y2 - Y1));
 }
+
+void NormalizeVector2D(float *X, float *Y) {
+    float Lenght = sqrt(((*X) * (*X)) + ((*Y) * (*Y)));
+    if (Lenght > 0.0f) {
+        *X /= Lenght;
+        *Y /= Lenght;
+    }
+}

@@ -7,11 +7,13 @@ static uint32_t* ColorBuffer = NULL;
 
 // Store buffer width and do not pass as parameter in every function.
 static uint32_t BufferWidth = 0;
+static uint32_t BufferHeight = 0;
 
 
 void CreateColorBuffer(uint32_t Width, uint32_t Height) {
     ColorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * (uint32_t)Width * (uint32_t)Height);
     BufferWidth = Width;
+    BufferHeight = Height;
 }
 
 uint32_t* GetColorBuffer(void) {
@@ -19,8 +21,9 @@ uint32_t* GetColorBuffer(void) {
 }
 
 void DrawPixel(int32_t X, int32_t Y, uint32_t Color) {
-    // Just override data in memory. I don't check if index is valid. This should be straight forward func.
-    ColorBuffer[(BufferWidth * Y) + X] = Color;
+    if (X > 0 && X < BufferWidth && Y > 0 && Y < BufferHeight) {
+        ColorBuffer[(BufferWidth * Y) + X] = Color;
+    }
 }
 
 void DrawRectangle(int32_t X, int32_t Y, int32_t Width, int32_t Height, uint32_t Color) {
