@@ -12,8 +12,8 @@ player_t Player = {
     .Width = 10,
     .Height = 10,
     .RotationAngle = -HALF_PI,
-    .WalkSpeed = 150,
-    .TurnSpeed = 5 * (PI / 180)
+    .WalkSpeed = 60,
+    .TurnSpeed = 4 * (PI / 180)
 };
 
 void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDirection) {

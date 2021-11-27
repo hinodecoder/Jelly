@@ -64,7 +64,7 @@ void GetTileCenterPosition(int32_t x, int32_t y, float *OutX, float *OutY) {
 bool LoadMap(const char* MapFilePath) {
     upng_t* PngFile = upng_new_from_file(MapFilePath);
     
-    if (PngFile == NULL) {
+    if (PngFile == 0) {
         return false;
     }
     
