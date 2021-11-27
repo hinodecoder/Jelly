@@ -25,10 +25,10 @@ void UpdateInput(void) {
     // Update keyboard keys.
     int32_t NumKeys = 0;
     const uint8_t* KeyStates = SDL_GetKeyboardState(&NumKeys);
-    Keys[EKEY_UP] = KeyStates[SDL_SCANCODE_UP];
-    Keys[EKEY_DOWN] = KeyStates[SDL_SCANCODE_DOWN];
-    Keys[EKEY_LEFT] = KeyStates[SDL_SCANCODE_LEFT];
-    Keys[EKEY_RIGHT] = KeyStates[SDL_SCANCODE_RIGHT];
+    Keys[EKEY_UP] = KeyStates[SDL_SCANCODE_UP] || KeyStates[SDL_SCANCODE_W];
+    Keys[EKEY_DOWN] = KeyStates[SDL_SCANCODE_DOWN] || KeyStates[SDL_SCANCODE_S];
+    Keys[EKEY_LEFT] = KeyStates[SDL_SCANCODE_LEFT] || KeyStates[SDL_SCANCODE_A];
+    Keys[EKEY_RIGHT] = KeyStates[SDL_SCANCODE_RIGHT] || KeyStates[SDL_SCANCODE_D];
     
     // Update mouse state.
     int32_t LastMouseX = MouseState.X;
@@ -48,7 +48,4 @@ void UpdateInput(void) {
     // Calculate delta for X and Y.
     MouseState.DeltaX = MouseState.X - MouseState.LastX;
     MouseState.DeltaY = MouseState.Y - MouseState.LastY;
-    
-    // debug print
-    printf("Mouse Delta X: %d and Y: %d \n", MouseState.DeltaX, MouseState.DeltaY);
 }
