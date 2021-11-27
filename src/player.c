@@ -4,29 +4,48 @@
 #include "map.h"
 #include "graphics.h"
 #include "math.h"
+#include "input.h"
 
 player_t Player = {
     .X = 4 * TILE_SIZE,
     .Y = 5 * TILE_SIZE,
     .Width = 10,
     .Height = 10,
-    .TurnDirection = 0,
-    .WalkDirection = 0,
     .RotationAngle = PI / 2,
-    .StrafeDirection = 0,
     .WalkSpeed = 200,
     .TurnSpeed = 85 * (PI / 180)
 };
 
 void MovePlayer(float DeltaTime) {
-    Player.RotationAngle += Player.TurnDirection * Player.TurnSpeed * DeltaTime;
+    int32_t WalkDirection = 0;
+    int32_t TurnDirection = 0;
+    int32_t StrafeDirection = 0;
+    
+    // Check if we can move in some direction.
+    if (Keys[EKEY_UP]) {
+        WalkDirection = 1;
+    }
+    else if (Keys[EKEY_DOWN]) {
+        WalkDirection = -1;
+    }
+    
+    // Check if we can rotate.
+    if (Keys[EKEY_LEFT]) {
+        TurnDirection = -1;
+    }
+    else if (Keys[EKEY_RIGHT]) {
+        TurnDirection = 1;
+    }
+    
+    Player.RotationAngle += TurnDirection * Player.TurnSpeed * DeltaTime;
+    
     // Important thing to do: always normalize rotation angle!
     NormalizeAngle(&Player.RotationAngle);
 
     // TODO: Do strafing, use StrafeDirection
     
     // Move player if there is no collision.
-    float MoveStep = Player.WalkDirection * Player.WalkSpeed * DeltaTime;
+    float MoveStep = WalkDirection * Player.WalkSpeed * DeltaTime;
     float NewPlayerX = Player.X + cos(Player.RotationAngle) * MoveStep;
     float NewPlayerY = Player.Y + sin(Player.RotationAngle) * MoveStep;
 
