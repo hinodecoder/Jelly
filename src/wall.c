@@ -18,7 +18,7 @@ void RenderWallProjection(void) {
         
         // Draw ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            DrawPixel(x, y, 0xff000000);
+            DrawPixel(x, y, 0xff9b7582);
         }
         
         int32_t TextureOffsetX = 0;
@@ -59,7 +59,7 @@ void RenderWallProjection(void) {
         
         // Draw floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
-            DrawPixel(x, y, 0xff131313);
+            DrawPixel(x, y, 0xff221c16);
         }
     }
 }
