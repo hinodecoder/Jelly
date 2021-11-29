@@ -13,6 +13,9 @@ typedef struct {
     float Distance;
     bool WasHitVertical;
     int32_t TextureId;
+    
+    // This can be used by something other than wall to block a ray.
+    void* BlockedBy;
 } ray_t;
 
 extern ray_t Rays[NUM_RAYS];

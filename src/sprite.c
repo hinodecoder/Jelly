@@ -131,10 +131,15 @@ void RenderSpriteProjection(void) {
 
                     // Check if current pixel is behind a wall.
                     const bool IsPixelBehindWall = CurrentSprite->Distance > Rays[x].Distance;
-
+                    
                     // Skip "magenta"
                     if (TexelColor != 0xffff00ff && !IsPixelBehindWall) {
                         DrawPixel(x, y, TexelColor);
+                        
+                        // (NOTE): Store information in ray struct that it hit something other than wall.
+                        // This is my simple way to cache information about ray blocked by sprite.
+                        // It will be important in game mechanics involving ray casting.
+                        Rays[x].BlockedBy = CurrentSprite;
                     }
                 }
             }

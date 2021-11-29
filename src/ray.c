@@ -16,8 +16,6 @@ void CastAllRays(void) {
 }
 
 void CastRay(float RayAngle, int StripId) {
-    // TODO: implement crazy stuff
-    
     NormalizeAngle(&RayAngle);
     
     // Angle direction
@@ -130,7 +128,7 @@ void CastRay(float RayAngle, int StripId) {
     ? DistanceBetweenPoints(Player.X, Player.Y, wallHitX_vertical, wallHitY_vertical)
     : FLT_MAX;
     
-    // TODO: Save content of Ray into array of rays.
+    // Store some content.
     if (VerticalHitDistance < HorizontalHitDistance) {
         Rays[StripId].Distance = VerticalHitDistance;
         Rays[StripId].WallHitX = wallHitX_vertical;
@@ -147,6 +145,8 @@ void CastRay(float RayAngle, int StripId) {
         Rays[StripId].RayAngle = RayAngle;
     }
     
+    // (NOTE): Important. Reset information that the ray is blocked by something other than wall.
+    Rays[StripId].BlockedBy = 0;
 }
 
 void RenderMapRays(void) {
@@ -158,4 +158,12 @@ void RenderMapRays(void) {
                  MINIMAP_SCALE_FACTOR * Rays[i].WallHitY,
                  0xff0000ff);
     }
+    
+    // Draw center ray.
+    DrawLine(
+             MINIMAP_SCALE_FACTOR*Player.X,
+             MINIMAP_SCALE_FACTOR*Player.Y,
+             MINIMAP_SCALE_FACTOR* Rays[NUM_RAYS/2].WallHitX,
+             MINIMAP_SCALE_FACTOR* Rays[NUM_RAYS/2].WallHitY,
+             0xffff0000);
 }
