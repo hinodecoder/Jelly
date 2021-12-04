@@ -50,6 +50,9 @@ typedef struct {
     
     // Enable or disable sprite animation.
     bool Animate;
+
+    // Is animation in loop?
+    bool IsAnimationLoop; // TODO: Implement looping animation in sprites update.
     
     // Frames count.
     int32_t FramesCount;

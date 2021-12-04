@@ -24,6 +24,7 @@ void InitializeSprites(void) {
         
         // Default animation settings.
         CurrentSprite->Animate = false;
+        CurrentSprite->IsAnimationLoop = false;
         CurrentSprite->CurrentFrame = 0;
         CurrentSprite->AnimationFrameTime = 0.0f;
         CurrentSprite->FramesCount = 1;
