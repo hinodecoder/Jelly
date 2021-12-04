@@ -3,6 +3,7 @@
 #include "upng.h"
 #include "player.h"
 #include "sprite.h"
+#include "entity.h"
 
 #define NUM_OF_OBJECT_TYPES 4
 
@@ -95,11 +96,12 @@ bool LoadMap(const char* MapFilePath) {
                 // Handling spawning of ghost enemy
                 if (ObjectType == EOBJECT_GHOST) {
                     if (CurrentSpriteIndex < NUM_SPRITES) {
-                        sprite_t* GhostSprite = &Sprites[CurrentSpriteIndex++];
-                        GetTileCenterPosition(x, y, &GhostSprite->X, &GhostSprite->Y);
-                        GhostSprite->TextureId = 3;
-                        GhostSprite->Empty = false;
-                        GhostSprite->Scale = 1.0f;
+                        // Setup entity object.
+                        float PositionX;
+                        float PositionY;
+                        GetTileCenterPosition(x, y, &PositionX, &PositionY);
+                        CreateJellyEnemy(&Entities[CurrentSpriteIndex], PositionX, PositionY);
+                        CurrentSpriteIndex++;
                     }
                     
                     ObjectType = EOBJECT_EMPTY;

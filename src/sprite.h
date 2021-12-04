@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "consts.h"
 
 
 // This is struct for every sprite on map.
@@ -11,6 +12,9 @@
 // @ Empty -> It is not initialised yet so do not render anyway.
 // ________________________________________________________________
 typedef struct {
+    // Sprite id. Corresponds to entity id.
+    int32_t SpriteId;
+
     // Sprite location (could be in world or screen coordinates)
     float X;
     float Y;
@@ -59,7 +63,6 @@ typedef struct {
 } sprite_t;
 
 
-#define NUM_SPRITES 32
 extern sprite_t Sprites[NUM_SPRITES];
 extern int32_t NextFreeSpriteIndex; // This is index of next sprite we could use.
 

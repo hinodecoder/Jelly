@@ -11,6 +11,8 @@
 #include "wall.h"
 #include "sprite.h"
 #include "input.h"
+#include "entity.h"
+
 
 SDL_Window* Window = NULL;
 SDL_Renderer* Renderer = NULL;
@@ -90,7 +92,8 @@ void Setup(void) {
     
     LoadTextures();
     InitializeSprites();
-
+    CreateAllEntities();
+    
     LoadMap("./data/maps/Test.png");
     
     // Important: Create HUD AFTER loading a map due to sprite indexing.

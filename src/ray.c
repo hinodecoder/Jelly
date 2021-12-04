@@ -146,7 +146,7 @@ void CastRay(float RayAngle, int StripId) {
     }
     
     // (NOTE): Important. Reset information that the ray is blocked by something other than wall.
-    Rays[StripId].BlockedBy = 0;
+    Rays[StripId].BlockedBy = -1;
 }
 
 void RenderMapRays(void) {

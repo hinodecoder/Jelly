@@ -12,6 +12,7 @@ int32_t NextFreeSpriteIndex;
 void InitializeSprites(void) {
     for (int i=0; i < NUM_SPRITES; ++i) {
         sprite_t* CurrentSprite = &Sprites[i];
+        CurrentSprite->SpriteId = i;
         CurrentSprite->X = -1;
         CurrentSprite->Y = -1;
         CurrentSprite->TextureId = -1;
@@ -169,7 +170,7 @@ void RenderSpriteProjection(void) {
                         // (NOTE): Store information in ray struct that it hit something other than wall.
                         // This is my simple way to cache information about ray blocked by sprite.
                         // It will be important in game mechanics involving ray casting.
-                        Rays[x].BlockedBy = CurrentSprite;
+                        Rays[x].BlockedBy = CurrentSprite->SpriteId;
                     }
                 }
             }

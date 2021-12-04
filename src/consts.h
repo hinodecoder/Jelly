@@ -26,4 +26,7 @@
 #define FPS 60
 #define FRAME_TIME_LENGTH (1000 / FPS)
 
+#define NUM_SPRITES 32
+#define NUM_ENTITIES NUM_SPRITES
+
 #endif

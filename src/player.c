@@ -7,6 +7,8 @@
 #include "input.h"
 #include "ray.h"
 #include "sprite.h"
+#include "entity.h"
+
 
 player_t Player = {
     .X = 5 * TILE_SIZE,
@@ -81,12 +83,11 @@ void PlayerMove(float DeltaTime) {
 
 void PlayerShoot() {
     if (Keys[EKEY_SHOOT]) {
-        sprite_t* HitSprite = Rays[CENTER_RAY].BlockedBy;
-        if (HitSprite != 0) {
-            HitSprite->TextureId = 5;
-            HitSprite->Animate = true;
-            HitSprite->FramesCount = 50;
-            HitSprite->AnimationFrameTime = 100.0f;
+        int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
+        entity_t* HitEntity = &Entities[BlockedId];
+
+        if (HitEntity != 0) {
+            ApplyDamage(HitEntity, 1);
         }
     }
 }
