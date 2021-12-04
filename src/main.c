@@ -73,13 +73,21 @@ void CreateHUD(void) {
     sprite_t* WeaponSprite = &Sprites[NextFreeSpriteIndex++];
     WeaponSprite->Use2D = true;
     WeaponSprite->Empty = false;
-    WeaponSprite->TextureId = 4;
-    WeaponSprite->Scale = 2.0f;
+    WeaponSprite->TextureId = 5;
+    
+    // TODO: Test animation.
+    WeaponSprite->Animate = true;
+    WeaponSprite->CurrentFrame = 0;
+    WeaponSprite->AnimationFrameTime = 100.0f;
+    WeaponSprite->FramesCount = 50;
+    
+    WeaponSprite->X = 100;
+    WeaponSprite->Y = 100;
     
     // Weapon positioning.
-    texture_t* WeaponTexture = GetTexture(WeaponSprite->TextureId);
-    WeaponSprite->Y = WINDOW_H - WeaponTexture->Height;
-    WeaponSprite->X = (WINDOW_W / 2) - (WeaponTexture->Width / 2);
+    //texture_t* WeaponTexture = GetTexture(WeaponSprite->TextureId);
+    //WeaponSprite->Y = WINDOW_H - WeaponTexture->Height;
+    //WeaponSprite->X = (WINDOW_W / 2) - (WeaponTexture->Width / 2);
 }
 
 void Setup(void) {

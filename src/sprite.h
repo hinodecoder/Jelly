@@ -38,6 +38,18 @@ typedef struct {
     
     // TODO: Use sprite struct for 2d sprite in screen coordinates
     bool Use2D;
+    
+    // Current animation frame.
+    int32_t CurrentFrame;
+    
+    // Animation time (every X ms)
+    float AnimationFrameTime;
+    
+    // Enable or disable sprite animation.
+    bool Animate;
+    
+    // Frames count.
+    int32_t FramesCount;
 } sprite_t;
 
 

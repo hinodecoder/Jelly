@@ -21,6 +21,12 @@ void InitializeSprites(void) {
         CurrentSprite->Scale = 1; // TODO: After applying scale -> move sprite by it's size / 2 to place it on ground
         CurrentSprite->Empty = true;
         CurrentSprite->Use2D = false;
+        
+        // Default animation settings.
+        CurrentSprite->Animate = false;
+        CurrentSprite->CurrentFrame = 0;
+        CurrentSprite->AnimationFrameTime = 0.0f;
+        CurrentSprite->FramesCount = 1;
     }
     
     NextFreeSpriteIndex = 0;
@@ -28,10 +34,13 @@ void InitializeSprites(void) {
 
 void Render2DSprite(sprite_t* CurrentSprite) {
     texture_t* Texture = GetTexture(CurrentSprite->TextureId);
-    for (int32_t x = 0; x < Texture->Width; ++x) {
+    int32_t MaxWidth = Texture->Width / CurrentSprite->FramesCount;
+    int32_t StartPixel = CurrentSprite->Animate ? CurrentSprite->CurrentFrame * MaxWidth : 0;
+    
+    for (int32_t x = StartPixel; x < MaxWidth + StartPixel; ++x) {
         for (int32_t y = 0; y < Texture->Height; ++y) {
             uint32_t TexelColor = Texture->Buffer[(Texture->Width * y) + x];
-            DrawPixel(x + CurrentSprite->X, y + CurrentSprite->Y, TexelColor);
+            DrawPixel(x + CurrentSprite->X - StartPixel, y + CurrentSprite->Y, TexelColor);
         }
     }
 }
