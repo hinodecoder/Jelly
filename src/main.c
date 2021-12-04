@@ -134,9 +134,14 @@ void Update(void) {
 
     TicksLastFrame = SDL_GetTicks();
 
-    // move player
+    // TODO: Move gameplay code to some kind of state machine.
     PlayerMove(DeltaTime);
     PlayerShoot();
+
+    // Update all animated sprites.
+    UpdateAnimatedSprites(TicksLastFrame);
+
+    // Update all rays.
     CastAllRays();
 }
 
@@ -163,6 +168,17 @@ void RenderMapGrid(void) {
         }
     }
 }
+
+void Render2DLayer(void) {
+    for (int32_t i=0; i < NUM_SPRITES; ++i) {
+        sprite_t* CurrentSprite = &Sprites[i];
+
+        if (CurrentSprite->Use2D) {
+            Render2DSprite(CurrentSprite);
+        }
+    }
+}
+
 void Render(void) {
     ClearColorBuffer(0xff000000, WINDOW_W, WINDOW_H);
     
@@ -175,6 +191,9 @@ void Render(void) {
     //RenderMapRays();
     //RenderMapSprites();
     //RenderMapPlayer();
+    
+    // Render 2D layer.
+    Render2DLayer();
     
     RenderColorBuffer();
 }

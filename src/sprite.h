@@ -44,6 +44,9 @@ typedef struct {
     
     // Animation time (every X ms)
     float AnimationFrameTime;
+
+    // Time we go to next frame.
+    float NextTimeFrame;
     
     // Enable or disable sprite animation.
     bool Animate;
@@ -62,5 +65,7 @@ extern int32_t NextFreeSpriteIndex; // This is index of next sprite we could use
 void InitializeSprites(void);
 void RenderSpriteProjection(void);
 void RenderMapSprites(void);
+void Render2DSprite(sprite_t* CurrentSprite);
+void UpdateAnimatedSprites(float CurrentTime);
 
 #endif

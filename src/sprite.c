@@ -27,6 +27,7 @@ void InitializeSprites(void) {
         CurrentSprite->CurrentFrame = 0;
         CurrentSprite->AnimationFrameTime = 0.0f;
         CurrentSprite->FramesCount = 1;
+        CurrentSprite->NextTimeFrame = 0.0f;
     }
     
     NextFreeSpriteIndex = 0;
@@ -60,7 +61,6 @@ void RenderSpriteProjection(void) {
         }
         
         if (CurrentSprite->Use2D) {
-            Render2DSprite(CurrentSprite);
             continue;
         }
         
@@ -141,21 +141,23 @@ void RenderSpriteProjection(void) {
         // Query texture W and H.
         // TODO: Add check if texture ID is valid.
         texture_t* CurrentTexture = GetTexture(CurrentSprite->TextureId);
-        int32_t TextureWidth = CurrentTexture->Width;
+        int32_t TextureWidth = CurrentSprite->Animate ? CurrentTexture->Width / CurrentSprite->FramesCount : CurrentTexture->Width;
         int32_t TextureHeight = CurrentTexture->Height;
 
         // Draw sprite.
-        // TODO: Optimize, performance problem when close to camera (filling screen)
         for (int32_t x=SpriteLeftX; x < SpriteRightX; ++x) {
             float TexelWidth = (TextureWidth / SpriteWidth);
             int32_t TextureOffsetX = (x - SpriteLeftX) * TexelWidth;
+            TextureOffsetX += TextureWidth * CurrentSprite->CurrentFrame;
+
             for (int32_t y = SpriteTopPixel; y < SpriteBottomPixel; ++y) {
                 int32_t DistanceFromTop = y + (SpriteHeight / 2) -  (WINDOW_H / 2);
                 int32_t TextureOffsetY = DistanceFromTop * (TextureHeight / SpriteHeight);
+
                 if (x > 0 && x < WINDOW_W && y > 0 && y < WINDOW_H) {
                     // Get texel and draw.
                     uint32_t* TextureBuffer = CurrentTexture->Buffer;
-                    uint32_t TexelColor = TextureBuffer[(TextureWidth * TextureOffsetY) + TextureOffsetX];
+                    uint32_t TexelColor = TextureBuffer[(CurrentTexture->Width * TextureOffsetY) + TextureOffsetX];
 
                     // Check if current pixel is behind a wall.
                     const bool IsPixelBehindWall = CurrentSprite->Distance > Rays[x].Distance;
@@ -169,6 +171,20 @@ void RenderSpriteProjection(void) {
                         Rays[x].BlockedBy = CurrentSprite;
                     }
                 }
+            }
+        }
+    }
+}
+
+void UpdateAnimatedSprites(float CurrentTime) {
+    for (int i=0; i < NUM_SPRITES; ++i) {
+        sprite_t* CurrentSprite = &Sprites[i];
+
+        if (CurrentSprite->Animate) {
+            if (CurrentSprite->NextTimeFrame <= CurrentTime) {
+                // Go to next frame or set to 0 if exceeds frames counter.
+                CurrentSprite->CurrentFrame = CurrentSprite->CurrentFrame + 1 >= CurrentSprite->FramesCount ? 0 : CurrentSprite->CurrentFrame + 1;
+                CurrentSprite->NextTimeFrame = CurrentTime + CurrentSprite->AnimationFrameTime;
             }
         }
     }

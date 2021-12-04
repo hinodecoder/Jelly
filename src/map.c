@@ -99,7 +99,7 @@ bool LoadMap(const char* MapFilePath) {
                         GetTileCenterPosition(x, y, &GhostSprite->X, &GhostSprite->Y);
                         GhostSprite->TextureId = 3;
                         GhostSprite->Empty = false;
-                        GhostSprite->Scale = 0.5f;
+                        GhostSprite->Scale = 1.0f;
                     }
                     
                     ObjectType = EOBJECT_EMPTY;
