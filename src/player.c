@@ -5,6 +5,8 @@
 #include "graphics.h"
 #include "math.h"
 #include "input.h"
+#include "ray.h"
+#include "sprite.h"
 
 player_t Player = {
     .X = 5 * TILE_SIZE,
@@ -12,7 +14,7 @@ player_t Player = {
     .Width = 10,
     .Height = 10,
     .RotationAngle = -HALF_PI,
-    .WalkSpeed = 60,
+    .WalkSpeed = 120,// 60,
     .TurnSpeed = 4 * (PI / 180)
 };
 
@@ -78,7 +80,12 @@ void PlayerMove(float DeltaTime) {
 }
 
 void PlayerShoot() {
-    
+    if (Keys[EKEY_SHOOT]) {
+        sprite_t* HitSprite = Rays[CENTER_RAY].BlockedBy;
+        if (HitSprite != 0) {
+             
+        }
+    }
 }
 
 void RenderMapPlayer(void) {

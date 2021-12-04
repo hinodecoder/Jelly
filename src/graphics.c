@@ -22,7 +22,10 @@ uint32_t* GetColorBuffer(void) {
 
 void DrawPixel(int32_t X, int32_t Y, uint32_t Color) {
     if (X > 0 && X < BufferWidth && Y > 0 && Y < BufferHeight) {
-        ColorBuffer[(BufferWidth * Y) + X] = Color;
+        // Skip "magenta" color
+        if (Color != 0xffff00ff) {
+            ColorBuffer[(BufferWidth * Y) + X] = Color;
+        }
     }
 }
 

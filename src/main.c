@@ -68,6 +68,20 @@ void DestroyWindow(void) {
     SDL_Quit();
 }
 
+// TODO: Move somewhere
+void CreateHUD(void) {
+    sprite_t* WeaponSprite = &Sprites[NextFreeSpriteIndex++];
+    WeaponSprite->Use2D = true;
+    WeaponSprite->Empty = false;
+    WeaponSprite->TextureId = 4;
+    WeaponSprite->Scale = 2.0f;
+    
+    // Weapon positioning.
+    texture_t* WeaponTexture = GetTexture(WeaponSprite->TextureId);
+    WeaponSprite->Y = WINDOW_H - WeaponTexture->Height;
+    WeaponSprite->X = (WINDOW_W / 2) - (WeaponTexture->Width / 2);
+}
+
 void Setup(void) {
     // Allocate color buffer here
     CreateColorBuffer(WINDOW_W, WINDOW_H);
@@ -77,8 +91,11 @@ void Setup(void) {
     
     LoadTextures();
     InitializeSprites();
-    
+
     LoadMap("./data/maps/Test.png");
+    
+    // Important: Create HUD AFTER loading a map due to sprite indexing.
+    CreateHUD();
 }
 
 void ProcessAppInput(void) {
@@ -111,6 +128,7 @@ void Update(void) {
 
     // move player
     PlayerMove(DeltaTime);
+    PlayerShoot();
     CastAllRays();
 }
 
@@ -145,10 +163,10 @@ void Render(void) {
     RenderSpriteProjection();
     
     // Render minimap objects.
-    RenderMapGrid();
-    RenderMapRays();
-    RenderMapSprites();
-    RenderMapPlayer();
+    //RenderMapGrid();
+    //RenderMapRays();
+    //RenderMapSprites();
+    //RenderMapPlayer();
     
     RenderColorBuffer();
 }

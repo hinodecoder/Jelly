@@ -107,6 +107,8 @@ bool LoadMap(const char* MapFilePath) {
                 
                 Map[y][x] = ObjectType;
             }
+            
+            NextFreeSpriteIndex = CurrentSpriteIndex + 1;
         }
     }
     

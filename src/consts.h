@@ -18,6 +18,7 @@
 #define FOV_HALF_ANGLE FOV_ANGLE/2
 
 #define NUM_RAYS WINDOW_W
+#define CENTER_RAY NUM_RAYS/2
 
 // TODO: Move to some kind of a function?
 #define DISTANCE_TO_PROJECTION_PLANE ((WINDOW_W / 2) / tan(FOV_ANGLE / 2))

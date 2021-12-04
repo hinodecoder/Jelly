@@ -7,6 +7,7 @@
 #include "ray.h"
 
 sprite_t Sprites[NUM_SPRITES];
+int32_t NextFreeSpriteIndex;
 
 void InitializeSprites(void) {
     for (int i=0; i < NUM_SPRITES; ++i) {
@@ -19,6 +20,19 @@ void InitializeSprites(void) {
         CurrentSprite->IsVisible = false;
         CurrentSprite->Scale = 1; // TODO: After applying scale -> move sprite by it's size / 2 to place it on ground
         CurrentSprite->Empty = true;
+        CurrentSprite->Use2D = false;
+    }
+    
+    NextFreeSpriteIndex = 0;
+}
+
+void Render2DSprite(sprite_t* CurrentSprite) {
+    texture_t* Texture = GetTexture(CurrentSprite->TextureId);
+    for (int32_t x = 0; x < Texture->Width; ++x) {
+        for (int32_t y = 0; y < Texture->Height; ++y) {
+            uint32_t TexelColor = Texture->Buffer[(Texture->Width * y) + x];
+            DrawPixel(x + CurrentSprite->X, y + CurrentSprite->Y, TexelColor);
+        }
     }
 }
 
@@ -33,6 +47,11 @@ void RenderSpriteProjection(void) {
         
         // Skip uninitialised sprite.
         if (CurrentSprite->Empty) {
+            continue;
+        }
+        
+        if (CurrentSprite->Use2D) {
+            Render2DSprite(CurrentSprite);
             continue;
         }
         
@@ -132,8 +151,7 @@ void RenderSpriteProjection(void) {
                     // Check if current pixel is behind a wall.
                     const bool IsPixelBehindWall = CurrentSprite->Distance > Rays[x].Distance;
                     
-                    // Skip "magenta"
-                    if (TexelColor != 0xffff00ff && !IsPixelBehindWall) {
+                    if (!IsPixelBehindWall) {
                         DrawPixel(x, y, TexelColor);
                         
                         // (NOTE): Store information in ray struct that it hit something other than wall.
