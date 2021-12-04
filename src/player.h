@@ -14,7 +14,8 @@ typedef struct {
 extern player_t Player;
 
 
-void MovePlayer(float DeltaTime);
+void PlayerMove(float DeltaTime);
+void PlayerShoot(void);
 void RenderMapPlayer(void);
 
 

@@ -17,7 +17,7 @@ void InitializeSprites(void) {
         CurrentSprite->Angle = 0;
         CurrentSprite->Distance = -1;
         CurrentSprite->IsVisible = false;
-        CurrentSprite->Scale = 1;
+        CurrentSprite->Scale = 1; // TODO: After applying scale -> move sprite by it's size / 2 to place it on ground
         CurrentSprite->Empty = true;
     }
 }

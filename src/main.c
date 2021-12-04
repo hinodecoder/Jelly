@@ -110,7 +110,7 @@ void Update(void) {
     TicksLastFrame = SDL_GetTicks();
 
     // move player
-    MovePlayer(DeltaTime);
+    PlayerMove(DeltaTime);
     CastAllRays();
 }
 

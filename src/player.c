@@ -36,7 +36,7 @@ void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDi
     *Turn = MouseState.DeltaX;
 }
 
-void MovePlayer(float DeltaTime) {
+void PlayerMove(float DeltaTime) {
     int32_t WalkDirection = 0;
     int32_t Turn = 0;
     int32_t StrafeDirection = 0;
@@ -75,6 +75,10 @@ void MovePlayer(float DeltaTime) {
         Player.X = NewPlayerX;
         Player.Y = NewPlayerY;
     }
+}
+
+void PlayerShoot() {
+    
 }
 
 void RenderMapPlayer(void) {
