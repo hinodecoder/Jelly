@@ -235,15 +235,16 @@ void OnJellyWander(entity_t* JellyEntity, float DeltaTime) {
             return;
         }
         
-        JellySprite->X = FinalDestinationX;
-        JellySprite->Y = FinalDestinationY;
-        
         // Check if destination reached.
         float DistanceToDestination = DistanceBetweenPoints(JellySprite->X, JellySprite->Y, JellyEntity->DestinationX, JellyEntity->DestinationY);
         if (DistanceToDestination <= AI_SEEK_DISTANCE) {
             JellyEntity->DestinationX = 0.0f;
             JellyEntity->DestinationY = 0.0f;
+            return;
         }
+        
+        JellySprite->X = FinalDestinationX;
+        JellySprite->Y = FinalDestinationY;
     }
 }
 
