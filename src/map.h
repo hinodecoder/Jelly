@@ -12,4 +12,7 @@ int32_t GetMapAt(int32_t I, int32_t J);
 bool IsInsideMap(float X, float Y);
 bool LoadMap(const char* MapFilePath);
 
+// NAVIGATION FUNCTIONS
+// _____________________________________________________________
+
 #endif /* MAP_H */

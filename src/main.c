@@ -117,6 +117,13 @@ void ProcessAppInput(void) {
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
+void UpdateAllEntities(float DeltaTime, float CurrentTime) {
+    for (int32_t i=0; i < NUM_ENTITIES; ++i) {
+        entity_t* CurrentEntity = &Entities[i];
+        UpdateEntity(CurrentEntity, DeltaTime, CurrentTime);
+    }
+}
+
 void Update(void) {
     int TimeToWait = FRAME_TIME_LENGTH - (SDL_GetTicks() - TicksLastFrame);
 
@@ -131,6 +138,7 @@ void Update(void) {
     // TODO: Move gameplay code to some kind of state machine.
     PlayerMove(DeltaTime);
     PlayerShoot();
+    UpdateAllEntities(DeltaTime, TicksLastFrame);
 
     // Update all animated sprites.
     UpdateAnimatedSprites(TicksLastFrame);
