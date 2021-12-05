@@ -52,6 +52,10 @@ texture_t* GetTexture(int32_t Index) {
 
 void FreeTextures(void) {
     for (int32_t i=0; i < NUM_TEXTURES; ++i) {
-        upng_free(UPNGLoadedTextures[i]);
+        upng_t* Texture = UPNGLoadedTextures[i];
+        if (Texture) {
+            upng_free(Texture);
+            UPNGLoadedTextures[i] = 0;
+        }
     }
 }
