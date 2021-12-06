@@ -1,8 +1,8 @@
 build:
-	gcc -std=c99 ./src/*.c -lSDL2 -o edgar
+	gcc -std=c99 ./src/*.c -lSDL2 -o Jelly
 
 run:
-	./edgar
+	./Jelly
 
 clean:
-	rm edgar
+	rm Jelly
