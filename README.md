@@ -1,4 +1,4 @@
-# Edgar
+# Jelly
 
 Game written in C programming language using software rendering technique called Raycasting based on Wolfenstein 3D original game.
 
