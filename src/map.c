@@ -5,7 +5,7 @@
 #include "sprite.h"
 #include "entity.h"
 
-#define NUM_OF_OBJECT_TYPES 4
+#define NUM_OF_OBJECT_TYPES 5
 
 static uint32_t Map[MAP_NUM_ROWS][MAP_NUM_COLS];
 
@@ -15,7 +15,8 @@ enum ObjectTypes {
     EOBJECT_EMPTY = 0,
     EOBJECT_SAMPLE_WALL = 1,
     EOBJECT_PLAYER = 2,
-    EOBJECT_GHOST = 3
+    EOBJECT_GHOST = 3,
+    EOBJECT_DOORS = 4
 };
 
 // TileColors directly map color with object type in map png file.
@@ -24,7 +25,20 @@ static uint32_t TileColors[NUM_OF_OBJECT_TYPES] = {
     /*1*/0xff32283f, // sample wall
     /*2*/0xff62e7ff, // player
     /*3*/0xff443be5, // ghost enemy
+    /*4*/0xff000000, // doors
 };
+
+
+bool MapHasDoorsAt(float X, float Y) {
+    if (X < 0 || X >= MAP_NUM_COLS * TILE_SIZE || Y < 0 || Y >= MAP_NUM_ROWS * TILE_SIZE) {
+        return true;
+    }
+
+    int MapGridIndexX = floor(X / TILE_SIZE);
+    int MapGridIndexY = floor(Y / TILE_SIZE); 
+
+    return Map[MapGridIndexY][MapGridIndexX] == EOBJECT_DOORS;
+}
 
 
 bool MapHasWallAt(float X, float Y) {
@@ -33,8 +47,8 @@ bool MapHasWallAt(float X, float Y) {
     }
     
     int MapGridIndexX = floor(X / TILE_SIZE);
-    int MapGridIndexY = floor(Y / TILE_SIZE);
-    
+    int MapGridIndexY = floor(Y / TILE_SIZE); 
+
     return Map[MapGridIndexY][MapGridIndexX] != 0;
 }
 
@@ -84,7 +98,8 @@ bool LoadMap(const char* MapFilePath) {
                 uint32_t MapColor = Buffer[(MAP_NUM_COLS * y) + x];
                 int32_t ObjectType = GetTileFromColor(MapColor);
                 
-                // Check if this is a tile marked as "player".
+                // PLAYER
+                // ____________________________________________________
                 if (ObjectType == EOBJECT_PLAYER) {
                     // Set player start position.
                     GetTileCenterPosition(x, y, &Player.X, &Player.Y);
@@ -93,7 +108,8 @@ bool LoadMap(const char* MapFilePath) {
                     ObjectType = EOBJECT_EMPTY;
                 }
                 
-                // Handling spawning of ghost enemy
+                // JELLY ENEMY
+                // ____________________________________________________
                 if (ObjectType == EOBJECT_GHOST) {
                     if (CurrentSpriteIndex < NUM_SPRITES) {
                         // Setup entity object.
