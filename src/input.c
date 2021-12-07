@@ -44,15 +44,15 @@ void UpdateInput(void) {
     int32_t MouseButtons = SDL_GetMouseState(&CurrentMouseX, &CurrentMouseY);
     MouseState.X = CurrentMouseX;
     MouseState.Y = CurrentMouseY;
-    
+
     // Set last state (from previous frame).
     MouseState.LastX = LastMouseX;
     MouseState.LastY = LastMouseY;
-    
+
     // Calculate delta for X and Y.
     MouseState.DeltaX = MouseState.X - MouseState.LastX;
     MouseState.DeltaY = MouseState.Y - MouseState.LastY;
-    
+
     // Update mouse buttons.
     bool LeftMouseButtonPressed = MouseButtons & SDL_BUTTON_LMASK;
     Keys[EKEY_SHOOT] = LeftMouseButtonPressed && !KeysPrevious[EKEY_SHOOT];

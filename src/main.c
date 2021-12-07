@@ -19,7 +19,7 @@ SDL_Renderer* Renderer = NULL;
 bool IsGameRunning = false;
 int TicksLastFrame = 0;
 SDL_Texture* ColorBufferTexture = NULL;
-int32_t SHOW_CURSOR = 0;
+int32_t SHOW_CURSOR = 1;
 
 bool InitializeWindow(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -44,6 +44,8 @@ bool InitializeWindow(void) {
                                SDL_WINDOW_BORDERLESS);
                                //SDL_WINDOW_FULLSCREEN );
                                //0);
+
+    SDL_SetWindowTitle(Window, "Jelly");
 
     if (!Window) {
         fprintf(stderr, "Error creating window.\n");
@@ -103,25 +105,44 @@ void Setup(void) {
 void ProcessAppInput(void) {
     SDL_Event Event;
     SDL_PollEvent(&Event);
-    
+
+    // int32_t LastMouseX = MouseState.X;
+    // int32_t LastMouseY = MouseState.Y;
+    // int32_t CurrentMouseX;
+    // int32_t CurrentMouseY;
+    // int32_t MouseButtons = 0;
+
     switch (Event.type) {
-        case SDL_KEYDOWN:
-            if (Event.key.keysym.sym == SDLK_ESCAPE) {
-                IsGameRunning = false;
-            }
-            break;
+	    case SDL_KEYDOWN:
+		    if (Event.key.keysym.sym == SDLK_ESCAPE) {
+			    IsGameRunning = false;
+		    }
+		    break;
+
+	    case SDL_MOUSEMOTION:
+		    // Set current state.
+		    // MouseButtons = SDL_GetMouseState(&CurrentMouseX, &CurrentMouseY);
+		    // MouseState.X = Event.motion.x;
+		    // MouseState.Y = CurrentMouseY;
+//
+		    // Set last state (from previous frame).
+		    // MouseState.LastX = LastMouseX;
+		    // MouseState.LastY = LastMouseY;
+//
+		    // Calculate delta for X and Y.
+		    // MouseState.DeltaX = MouseState.X - MouseState.LastX;
+		    // MouseState.DeltaY = MouseState.Y - MouseState.LastY;
+
+	    break;
     }
-    
-    SDL_ShowCursor(SHOW_CURSOR);
-    SDL_CaptureMouse(SDL_TRUE);
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+
 }
 
 void UpdateAllEntities(float DeltaTime, float CurrentTime) {
-    for (int32_t i=0; i < NUM_ENTITIES; ++i) {
-        entity_t* CurrentEntity = &Entities[i];
-        UpdateEntity(CurrentEntity, DeltaTime, CurrentTime);
-    }
+	for (int32_t i=0; i < NUM_ENTITIES; ++i) {
+		entity_t* CurrentEntity = &Entities[i];
+		UpdateEntity(CurrentEntity, DeltaTime, CurrentTime);
+	}
 }
 
 void Update(void) {
@@ -145,6 +166,14 @@ void Update(void) {
 
     // Update all rays.
     CastAllRays();
+
+
+    // temp handling exit
+    int32_t NumKeys;
+    const uint8_t* KeyStates = SDL_GetKeyboardState(&NumKeys);
+    if (KeyStates[SDL_SCANCODE_ESCAPE]) {
+	IsGameRunning = false;
+    }
 }
 
 void RenderColorBuffer(void) {
@@ -198,6 +227,11 @@ void Render(void) {
     Render2DLayer();
     
     RenderColorBuffer();
+
+
+    SDL_ShowCursor(SHOW_CURSOR);
+    SDL_CaptureMouse(SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void ReleaseResources(void) {
@@ -211,7 +245,8 @@ int main(void) {
     Setup();
 
     while (IsGameRunning) {
-        ProcessAppInput();
+        //ProcessAppInput();
+	SDL_PumpEvents();
         UpdateInput();
         Update();
         Render();
