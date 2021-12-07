@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <float.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include "consts.h"
 
