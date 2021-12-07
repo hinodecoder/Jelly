@@ -9,7 +9,7 @@
 
 #define TILE_SIZE 32
 
-#define MINIMAP_SCALE_FACTOR 0.35
+#define MINIMAP_SCALE_FACTOR 0.15
 
 #define WINDOW_W 320
 #define WINDOW_H 200
