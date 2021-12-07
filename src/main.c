@@ -218,10 +218,10 @@ void Render(void) {
     RenderSpriteProjection();
     
     // Render minimap objects.
-    RenderMapGrid();
-    RenderMapRays();
-    RenderMapSprites();
-    RenderMapPlayer();
+    //RenderMapGrid();
+    //RenderMapRays();
+    //RenderMapSprites();
+    //RenderMapPlayer();
     
     // Render 2D layer.
     Render2DLayer();
