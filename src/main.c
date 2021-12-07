@@ -238,8 +238,13 @@ void ReleaseResources(void) {
     FreeTextures();
 }
 
-int main(void) {
-    IsGameRunning = InitializeWindow();
+int main(int argc, char *argv[]) {
+	if (argc) {
+		if (argv) {
+		}
+	}
+	
+	IsGameRunning = InitializeWindow();
 
     InitInput();
     Setup();
