@@ -150,7 +150,7 @@ void Update(void) {
 
 	// TODO: Move gameplay code to some kind of state machine.
 	PlayerMove(DeltaTime);
-	PlayerShoot();
+	PlayerShoot(TicksLastFrame);
 	UpdateAllEntities(DeltaTime, TicksLastFrame);
 
 	// Update all animated sprites.

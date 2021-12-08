@@ -13,7 +13,12 @@ typedef struct {
     float RotationAngle;
     float WalkSpeed;
     float TurnSpeed;
+
+	// Shooting mechanic.
 	int32_t WeaponSprites[NUM_WEAPON_STATES];
+	float ShootFrequency;
+	float NextShootTime;
+	int32_t BasicWeaponDamage;
 } player_t;
 
 
@@ -21,7 +26,7 @@ extern player_t Player;
 
 
 void PlayerMove(float DeltaTime);
-void PlayerShoot(void);
+void PlayerShoot(float CurrentTime);
 void RenderMapPlayer(void);
 void OnShootAnimationEnd(sprite_t* CurrentSprite);
 

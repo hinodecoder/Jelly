@@ -17,7 +17,10 @@ player_t Player = {
 	.Height = 10,
 	.RotationAngle = -HALF_PI,
 	.WalkSpeed = 100,// 60,
-	.TurnSpeed = 8 * (PI / 180)
+	.TurnSpeed = 8 * (PI / 180),
+	.ShootFrequency = 500.0f,
+	.NextShootTime = 0.0f,
+	.BasicWeaponDamage = 1
 };
 
 void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDirection) {
@@ -93,14 +96,14 @@ void ClearWeaponAnimationStates() {
 	}
 }
 
-void PlayWeaponStatic() {
+void PlayWeaponStatic(void) {
 	ClearWeaponAnimationStates();
 
 	sprite_t* StaticWeapon = &Sprites[Player.WeaponSprites[0]];
 	StaticWeapon->IsVisible = true;
 }
 
-void PlayWeaponShoot() {
+void PlayWeaponShootAnimation(void) {
 	ClearWeaponAnimationStates();
 
 	sprite_t* ShootWeapon = &Sprites[Player.WeaponSprites[1]];
@@ -113,17 +116,23 @@ void OnShootAnimationEnd(sprite_t* CurrentSprite) {
 	CurrentSprite->OnAnimationEnd = 0;
 }
 
-void PlayerShoot() {
+bool CanShoot(float CurrentTime) {
+	const bool CanShoot = Player.NextShootTime <= CurrentTime;
+	return CanShoot;
+}
+
+void PlayerShoot(float CurrentTime) {
 	if (Keys[EKEY_SHOOT]) {
-
-		PlayWeaponShoot();
-
-		int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
-		if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
-			entity_t* HitEntity = &Entities[BlockedId];
-			if (HitEntity != 0) {
-				ApplyDamage(HitEntity, 1);
+		if (CanShoot(CurrentTime)) {
+			PlayWeaponShootAnimation();
+			int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
+			if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
+				entity_t* HitEntity = &Entities[BlockedId];
+				if (HitEntity != 0) {
+					ApplyDamage(HitEntity, Player.BasicWeaponDamage);
+				}
 			}
+			Player.NextShootTime = CurrentTime + Player.ShootFrequency;
 		}
 	}
 }
