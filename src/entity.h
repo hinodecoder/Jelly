@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "consts.h"
 
 // Struct for every entity in game.
@@ -13,6 +14,7 @@ typedef struct entity_t{
     // Health of that entity.
     int32_t MaxHealth;
     int32_t CurrentHealth;
+	bool CanBeHurt;
     
     // Movement.
     float Speed;

@@ -28,6 +28,7 @@ void CreateAllEntities(void) {
         CurrentEntity->EntityId = i;
         CurrentEntity->MaxHealth = 1;
         CurrentEntity->CurrentHealth = 1;
+		CurrentEntity->CanBeHurt = 1;
         
         CurrentEntity->Speed = 0.0f;
         
@@ -44,17 +45,19 @@ void CreateAllEntities(void) {
 }
 
 bool IsEntityDead(entity_t* CurrentEntity) {
-    return CurrentEntity->CurrentHealth <= 0.0f;
+	return CurrentEntity->CurrentHealth <= 0.0f;
 }
 
 void ApplyDamage(entity_t* CurrentEntity, int32_t Damage) {
-    if (CurrentEntity != 0) {
-        CurrentEntity->CurrentHealth = CurrentEntity->CurrentHealth - Damage;
-
-        if (CurrentEntity->CurrentHealth <= 0 && CurrentEntity->OnDeath != 0) {
-            CurrentEntity->OnDeath(CurrentEntity);
-        }
-    }
+	if (CurrentEntity != 0) {
+		if (CurrentEntity->CanBeHurt) {
+			CurrentEntity->CurrentHealth = CurrentEntity->CurrentHealth - Damage;
+			if (CurrentEntity->CurrentHealth <= 0 && CurrentEntity->OnDeath != 0) {
+				CurrentEntity->OnDeath(CurrentEntity);
+			}
+		}
+		// TODO: Add callback when entity is invincible and we need to show player some feedback.
+	}
 }
 
 void UpdateEntity(entity_t* CurrentEntity, float DeltaTime, float CurrentTime){
@@ -89,16 +92,22 @@ void OnAIUpdate(entity_t* CurrentEntity, float DeltaTime, float CurrentTime) {
 // JELLY ENEMY
 // _________________________________________________________________________________
 void CreateJellyEnemy(entity_t* CurrentEntity, float X, float Y) {
+	// Health stuff.
     CurrentEntity->MaxHealth = 4;
     CurrentEntity->CurrentHealth = 4;
+	CurrentEntity->CanBeHurt = 0;
+
+	// Some events and "polymorphic" functions.
     CurrentEntity->OnDeath = &OnJellyDeath;
     CurrentEntity->OnUpdate = &OnAIUpdate;
     CurrentEntity->OnThink = &OnJellyThink;
     CurrentEntity->Speed = JELLY_SPEED;
     
+	// Set random think frequency to look less dumb.
     int32_t RandomNumber = (rand() % 20 + 18);
     CurrentEntity->ThinkFrequency = (float) (RandomNumber * 100.0f);
 
+	// Setup basic sprite.
     sprite_t* CurrentSprite = &Sprites[CurrentEntity->EntityId];
     CurrentSprite->X = X;
     CurrentSprite->Y = Y;
