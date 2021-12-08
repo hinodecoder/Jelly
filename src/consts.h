@@ -11,8 +11,8 @@
 
 #define MINIMAP_SCALE_FACTOR 0.15
 
-#define WINDOW_W 320
-#define WINDOW_H 200
+#define WINDOW_W 640 
+#define WINDOW_H 400 
 
 #define FOV_ANGLE (60 * (PI / 180))
 #define FOV_HALF_ANGLE FOV_ANGLE/2
@@ -26,7 +26,7 @@
 #define FPS 60
 #define FRAME_TIME_LENGTH (1000 / FPS)
 
-#define NUM_SPRITES 32
+#define NUM_SPRITES 64
 #define NUM_ENTITIES NUM_SPRITES
 
 #endif

@@ -2,15 +2,16 @@
 #include "textures.h"
 
 
-#define NUM_TEXTURES 6
+#define NUM_TEXTURES 7 
 
 static const char* TexturesPaths[NUM_TEXTURES] = {
     /*0*/"./data/textures/DUNGEONBRICKS.png",
     /*1*/"./data/textures/DUNGEONCELL.png",
     /*2*/"./data/sprites/jelly.png",
     /*3*/"./data/sprites/SKULL.png",
-    /*4*/"./data/sprites/weapon.png",
-    /*5*/"./data/sprites/planet.png"
+    /*4*/"./data/sprites/shotgun_gg.png",
+    /*5*/"./data/sprites/planet.png",
+	/*6*/"./data/sprites/shotgun_static.png"
 };
 
 // Hold all textures neccessary in game.

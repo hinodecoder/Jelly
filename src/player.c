@@ -81,8 +81,43 @@ void PlayerMove(float DeltaTime) {
 	}
 }
 
+
+void ClearWeaponAnimationStates() {
+	// Clear all states.
+	for (int32_t i=0; i < NUM_WEAPON_STATES; ++i) {
+		sprite_t* StateSprite = &Sprites[Player.WeaponSprites[i]];
+		if (StateSprite) {
+			StateSprite->IsVisible = false;
+			StateSprite->CurrentFrame = 0;
+		}
+	}
+}
+
+void PlayWeaponStatic() {
+	ClearWeaponAnimationStates();
+
+	sprite_t* StaticWeapon = &Sprites[Player.WeaponSprites[0]];
+	StaticWeapon->IsVisible = true;
+}
+
+void PlayWeaponShoot() {
+	ClearWeaponAnimationStates();
+
+	sprite_t* ShootWeapon = &Sprites[Player.WeaponSprites[1]];
+	ShootWeapon->IsVisible = true;
+	ShootWeapon->OnAnimationEnd = &OnShootAnimationEnd;
+}
+
+void OnShootAnimationEnd(sprite_t* CurrentSprite) {
+	PlayWeaponStatic();
+	CurrentSprite->OnAnimationEnd = 0;
+}
+
 void PlayerShoot() {
 	if (Keys[EKEY_SHOOT]) {
+
+		PlayWeaponShoot();
+
 		int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
 		if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
 			entity_t* HitEntity = &Entities[BlockedId];

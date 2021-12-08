@@ -11,7 +11,7 @@
 // @ IsVisible -> Calculated realtime.
 // @ Empty -> It is not initialised yet so do not render anyway.
 // ________________________________________________________________
-typedef struct {
+typedef struct sprite_t {
     // Sprite id. Corresponds to entity id.
     int32_t SpriteId;
 
@@ -54,12 +54,12 @@ typedef struct {
     
     // Enable or disable sprite animation.
     bool Animate;
-
-    // Is animation in loop?
-    bool IsAnimationLoop; // TODO: Implement looping animation in sprites update.
     
     // Frames count.
     int32_t FramesCount;
+
+	// Callback when animation ends.
+	void(*OnAnimationEnd)(struct sprite_t*);
 } sprite_t;
 
 
@@ -69,6 +69,7 @@ extern int32_t NextFreeSpriteIndex; // This is index of next sprite we could use
 
 // Simply initialize all sprites with default values and prepare to be used.
 void InitializeSprites(void);
+sprite_t* CreateSprite(int32_t TextureId, float X, float Y);
 void RenderSpriteProjection(void);
 void RenderMapSprites(void);
 void Render2DSprite(sprite_t* CurrentSprite);

@@ -72,17 +72,37 @@ void DestroyWindow(void) {
 	SDL_Quit();
 }
 
+// TODO: Move to player
+void CalculateWeaponScreenPosition(int32_t TextureId, float* X, float* Y, int32_t FramesCount) {
+	texture_t* WeaponTexture = GetTexture(TextureId);
+	*Y = WINDOW_H - WeaponTexture->Height;
+	*X = (WINDOW_W / 2) - ((WeaponTexture->Width / FramesCount) / 2);
+}
+
 // TODO: Move somewhere
 void CreateHUD(void) {
-	sprite_t* WeaponSprite = &Sprites[NextFreeSpriteIndex++];
-	WeaponSprite->Use2D = true;
-	WeaponSprite->Empty = false;
-	WeaponSprite->TextureId = 4;
+	// Create static weapon sprite.
+	sprite_t* StaticWeaponSprite = CreateSprite(ETEXTURE_SHOTGUN_STATIC, 0, 0);
+	StaticWeaponSprite->Use2D = true;
+	StaticWeaponSprite->Empty = false;
+	StaticWeaponSprite->IsVisible = true;
 
 	// Weapon positioning.
-	texture_t* WeaponTexture = GetTexture(WeaponSprite->TextureId);
-	WeaponSprite->Y = WINDOW_H - WeaponTexture->Height;
-	WeaponSprite->X = (WINDOW_W / 2) - (WeaponTexture->Width / 2);
+	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_STATIC, &StaticWeaponSprite->X, &StaticWeaponSprite->Y, 1);
+
+	//Create shooting weapon sprite.
+	sprite_t* ShootWeaponSprite = CreateSprite(ETEXTURE_SHOTGUN_SHOOT, 0, 0);
+	ShootWeaponSprite->Use2D = true;
+	ShootWeaponSprite->Empty = false;
+	ShootWeaponSprite->IsVisible = false;
+	ShootWeaponSprite->Animate = true;
+	ShootWeaponSprite->AnimationFrameTime = 50.0f;
+	ShootWeaponSprite->FramesCount = 5;
+
+	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_STATIC, &ShootWeaponSprite->X, &ShootWeaponSprite->Y, 5);
+
+	Player.WeaponSprites[0] = StaticWeaponSprite->SpriteId;
+	Player.WeaponSprites[1] = ShootWeaponSprite->SpriteId;
 }
 
 void Setup(void) {

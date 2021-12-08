@@ -25,27 +25,42 @@ void InitializeSprites(void) {
         
         // Default animation settings.
         CurrentSprite->Animate = false;
-        CurrentSprite->IsAnimationLoop = false;
         CurrentSprite->CurrentFrame = 0;
         CurrentSprite->AnimationFrameTime = 0.0f;
         CurrentSprite->FramesCount = 1;
         CurrentSprite->NextTimeFrame = 0.0f;
+
+		// Callbacks.
+		CurrentSprite->OnAnimationEnd = 0;
     }
     
     NextFreeSpriteIndex = 0;
 }
 
+sprite_t* CreateSprite(int32_t TextureId, float X, float Y) {
+	int32_t NewSpriteId = NextFreeSpriteIndex++;
+	sprite_t* NewSprite = &Sprites[NewSpriteId];
+	NewSprite->SpriteId = NewSpriteId; 
+	NewSprite->X = X;
+	NewSprite->Y = Y;
+	NewSprite->TextureId = TextureId;
+	return NewSprite;
+}
+
 void Render2DSprite(sprite_t* CurrentSprite) {
-    texture_t* Texture = GetTexture(CurrentSprite->TextureId);
-    int32_t MaxWidth = Texture->Width / CurrentSprite->FramesCount;
-    int32_t StartPixel = CurrentSprite->Animate ? CurrentSprite->CurrentFrame * MaxWidth : 0;
-    
-    for (int32_t x = StartPixel; x < MaxWidth + StartPixel; ++x) {
-        for (int32_t y = 0; y < Texture->Height; ++y) {
-            uint32_t TexelColor = Texture->Buffer[(Texture->Width * y) + x];
-            DrawPixel(x + CurrentSprite->X - StartPixel, y + CurrentSprite->Y, TexelColor);
-        }
-    }
+	if (!CurrentSprite->IsVisible) {
+		return;
+	}
+	texture_t* Texture = GetTexture(CurrentSprite->TextureId);
+	int32_t MaxWidth = Texture->Width / CurrentSprite->FramesCount;
+	int32_t StartPixel = CurrentSprite->Animate ? CurrentSprite->CurrentFrame * MaxWidth : 0;
+
+	for (int32_t x = StartPixel; x < MaxWidth + StartPixel; ++x) {
+		for (int32_t y = 0; y < Texture->Height; ++y) {
+			uint32_t TexelColor = Texture->Buffer[(Texture->Width * y) + x];
+			DrawPixel(x + CurrentSprite->X - StartPixel, y + CurrentSprite->Y, TexelColor);
+		}
+	}
 }
 
 void RenderSpriteProjection(void) {
@@ -182,10 +197,20 @@ void UpdateAnimatedSprites(float CurrentTime) {
     for (int i=0; i < NUM_SPRITES; ++i) {
         sprite_t* CurrentSprite = &Sprites[i];
 
-        if (CurrentSprite->Animate) {
+        if (CurrentSprite->Animate && CurrentSprite->IsVisible) {
             if (CurrentSprite->NextTimeFrame <= CurrentTime) {
                 // Go to next frame or set to 0 if exceeds frames counter.
-                CurrentSprite->CurrentFrame = CurrentSprite->CurrentFrame + 1 >= CurrentSprite->FramesCount ? 0 : CurrentSprite->CurrentFrame + 1;
+				int32_t CurrentFrame = CurrentSprite->CurrentFrame + 1;
+				if (CurrentFrame >= CurrentSprite->FramesCount) {
+					CurrentFrame = 0;
+					if (CurrentSprite->OnAnimationEnd != 0) {
+						// Call callback.
+						CurrentSprite->OnAnimationEnd(CurrentSprite);
+					}
+				}
+
+				CurrentSprite->CurrentFrame = CurrentFrame;
+
                 CurrentSprite->NextTimeFrame = CurrentTime + CurrentSprite->AnimationFrameTime;
             }
         }
