@@ -19,6 +19,7 @@ typedef struct {
 	float ShootFrequency;
 	float NextShootTime;
 	int32_t BasicWeaponDamage;
+	float WeaponAltModeDuration; // Entity frozen time.
 } player_t;
 
 

@@ -29,6 +29,8 @@ void CreateAllEntities(void) {
         CurrentEntity->MaxHealth = 1;
         CurrentEntity->CurrentHealth = 1;
 		CurrentEntity->CanBeHurt = 1;
+		CurrentEntity->Frozen = 0;
+		CurrentEntity->DefrostTime = 0.0f;
         
         CurrentEntity->Speed = 0.0f;
         
@@ -41,6 +43,8 @@ void CreateAllEntities(void) {
         CurrentEntity->OnUpdate = 0;
         CurrentEntity->OnAIAction = 0;
         CurrentEntity->OnThink = 0;
+		CurrentEntity->OnFreeze = 0;
+		CurrentEntity->OnDefrost = 0;
     }
 }
 
@@ -60,6 +64,14 @@ void ApplyDamage(entity_t* CurrentEntity, int32_t Damage) {
 	}
 }
 
+void Freeze(entity_t* CurrentEntity, float Duration, float CurrentTime) {
+	if (CurrentEntity != 0) {
+		if (CurrentEntity->OnFreeze != 0) {
+			CurrentEntity->OnFreeze(CurrentEntity, Duration, CurrentTime);
+		}
+	}
+}
+
 void UpdateEntity(entity_t* CurrentEntity, float DeltaTime, float CurrentTime){
     if (CurrentEntity) {
         if (CurrentEntity->OnUpdate != 0 && !IsEntityDead(CurrentEntity)) {
@@ -69,23 +81,37 @@ void UpdateEntity(entity_t* CurrentEntity, float DeltaTime, float CurrentTime){
 }
 
 void OnAIUpdate(entity_t* CurrentEntity, float DeltaTime, float CurrentTime) {
-    if (CurrentEntity == 0) {
-        return;
-    } 
+	if (CurrentEntity == 0) {
+		return;
+	} 
 
-    // Let AI think it.
-    if (CurrentEntity->NextThinkTime <= CurrentTime) {
-        CurrentEntity->NextThinkTime = CurrentEntity->ThinkFrequency + CurrentTime;
-        
-        if (CurrentEntity->OnThink) {
-            CurrentEntity->OnThink(CurrentEntity);
-        }
-    }
-    
-    // Execute action chosen by AI.
-    if (CurrentEntity->OnAIAction) {
-        CurrentEntity->OnAIAction(CurrentEntity, DeltaTime);
-    }
+	// Handle frozen status.
+	if (CurrentEntity->Frozen) {
+		if (CurrentEntity->DefrostTime <= CurrentTime) {
+			CurrentEntity->Frozen = 0;	
+			if (CurrentEntity->OnDefrost) {
+				CurrentEntity->OnDefrost(CurrentEntity);
+			}
+		}
+		else {
+			// We are still frozen so any AI logic doesn't make sense.
+			return;
+		}
+	}
+
+	// Let AI think it.
+	if (CurrentEntity->NextThinkTime <= CurrentTime) {
+		CurrentEntity->NextThinkTime = CurrentEntity->ThinkFrequency + CurrentTime;
+
+		if (CurrentEntity->OnThink) {
+			CurrentEntity->OnThink(CurrentEntity);
+		}
+	}
+
+	// Execute action chosen by AI.
+	if (CurrentEntity->OnAIAction) {
+		CurrentEntity->OnAIAction(CurrentEntity, DeltaTime);
+	}
 }
 
 
@@ -101,6 +127,9 @@ void CreateJellyEnemy(entity_t* CurrentEntity, float X, float Y) {
     CurrentEntity->OnDeath = &OnJellyDeath;
     CurrentEntity->OnUpdate = &OnAIUpdate;
     CurrentEntity->OnThink = &OnJellyThink;
+	CurrentEntity->OnFreeze = &OnJellyFreeze;
+	CurrentEntity->OnDefrost = &OnJellyDefrost;
+
     CurrentEntity->Speed = JELLY_SPEED;
     
 	// Set random think frequency to look less dumb.
@@ -270,4 +299,18 @@ void OnJellyDeath(entity_t* CurrentEntity) {
         
         CurrentEntity->CurrentHealth = 0;
     }
+}
+
+void OnJellyFreeze(entity_t* JellyEntity, float Duration, float CurrentTime) {
+	if (JellyEntity != 0) {
+		JellyEntity->Frozen = 1;
+		JellyEntity->DefrostTime = Duration + CurrentTime;
+		JellyEntity->CanBeHurt = 1; // Jelly can be hurt if frozen.
+	}
+}
+
+void OnJellyDefrost(entity_t* JellyEntity) {
+	if (JellyEntity) {
+		JellyEntity->CanBeHurt = 0;
+	}
 }

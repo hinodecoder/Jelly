@@ -14,7 +14,9 @@ typedef struct entity_t{
     // Health of that entity.
     int32_t MaxHealth;
     int32_t CurrentHealth;
+	float DefrostTime;
 	bool CanBeHurt;
+	bool Frozen;
     
     // Movement.
     float Speed;
@@ -29,6 +31,8 @@ typedef struct entity_t{
 
     void (*OnUpdate)(struct entity_t*, float, float);
     void (*OnDeath)(struct entity_t*);
+	void (*OnFreeze)(struct entity_t*, float Duration, float CurrentTime);
+	void (*OnDefrost)(struct entity_t*);
 } entity_t;
 
 extern entity_t Entities[NUM_ENTITIES];
@@ -37,6 +41,7 @@ extern entity_t Entities[NUM_ENTITIES];
 // ______________________________________________________________________
 void CreateAllEntities(void);
 void ApplyDamage(entity_t* CurrentEntity, int32_t Damage);
+void Freeze(entity_t* CurrentEntity, float Duration, float CurrentTime);
 void UpdateEntity(entity_t* CurrentEntity, float DeltaTime, float CurrentTime);
 void OnAIUpdate(entity_t* CurrentEntity, float DeltaTime, float CurrentTime);
 
@@ -46,6 +51,8 @@ void CreateJellyEnemy(entity_t* CurrentEntity, float X, float Y);
 void OnJellyThink(entity_t* JellyEntity);
 void OnJellyChasePlayer(entity_t* JellyEntity, float DeltaTime);
 void OnJellyWander(entity_t* JellyEntity, float DeltaTime);
+void OnJellyFreeze(entity_t* JellyEntity, float Duration, float CurrentTime);
+void OnJellyDefrost(entity_t* JellyEntity);
 void OnJellyDeath(entity_t* CurrentEntity);
 
 #endif

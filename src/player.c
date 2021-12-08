@@ -20,7 +20,8 @@ player_t Player = {
 	.TurnSpeed = 8 * (PI / 180),
 	.ShootFrequency = 500.0f,
 	.NextShootTime = 0.0f,
-	.BasicWeaponDamage = 1
+	.BasicWeaponDamage = 1,
+	.WeaponAltModeDuration = 2000.0f // 2 sec
 };
 
 void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDirection) {
@@ -121,7 +122,12 @@ bool CanShoot(float CurrentTime) {
 	return CanShoot;
 }
 
+void DelayNextShoot(float CurrentTime) {
+	Player.NextShootTime = CurrentTime + Player.ShootFrequency;
+}
+
 void PlayerShoot(float CurrentTime) {
+	// Primary shoot mode.
 	if (Keys[EKEY_SHOOT]) {
 		if (CanShoot(CurrentTime)) {
 			PlayWeaponShootAnimation();
@@ -132,9 +138,24 @@ void PlayerShoot(float CurrentTime) {
 					ApplyDamage(HitEntity, Player.BasicWeaponDamage);
 				}
 			}
-			Player.NextShootTime = CurrentTime + Player.ShootFrequency;
+			DelayNextShoot(CurrentTime);
 		}
 	}
+	// Secondary shoot mode.
+	else
+		if (Keys[EKEY_ALT_SHOOT]) {
+			if (CanShoot(CurrentTime)) {
+				PlayWeaponShootAnimation();
+				int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
+				if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
+					entity_t* HitEntity = &Entities[BlockedId];
+					if (HitEntity != 0) {
+						Freeze(HitEntity, Player.WeaponAltModeDuration, CurrentTime);
+					}
+				}
+				DelayNextShoot(CurrentTime);
+			}
+		}	
 }
 
 void RenderMapPlayer(void) {

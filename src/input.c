@@ -54,12 +54,15 @@ void UpdateInput(void) {
     MouseState.DeltaY = MouseState.Y - MouseState.LastY;
 
     // Update mouse buttons.
-    bool LeftMouseButtonPressed = MouseButtons & SDL_BUTTON_LMASK;
+	const bool LeftMouseButtonPressed = MouseButtons & SDL_BUTTON_LMASK;
     Keys[EKEY_SHOOT] = LeftMouseButtonPressed && !KeysPrevious[EKEY_SHOOT];
+	const bool RightMouseButtonPressed = MouseButtons & SDL_BUTTON_RMASK;
+	Keys[EKEY_ALT_SHOOT] = RightMouseButtonPressed && !KeysPrevious[EKEY_ALT_SHOOT];
     
     // Copy new to old.
     memcpy(KeysPrevious, Keys, sizeof(bool) * NUMBER_OF_KEYS);
     
     // Update previous keys states.
     KeysPrevious[EKEY_SHOOT] = LeftMouseButtonPressed;
+	KeysPrevious[EKEY_ALT_SHOOT] = RightMouseButtonPressed;
 }
