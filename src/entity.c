@@ -140,15 +140,15 @@ void CreateJellyEnemy(entity_t* CurrentEntity, float X, float Y) {
     sprite_t* CurrentSprite = &Sprites[CurrentEntity->EntityId];
     CurrentSprite->X = X;
     CurrentSprite->Y = Y;
-    CurrentSprite->TextureId = 2;
+    CurrentSprite->TextureId = 1;
     CurrentSprite->Empty = false;
     CurrentSprite->Scale = 0.5f;
     
     // Jelly animation.
     CurrentSprite->CurrentFrame = 0;
-    CurrentSprite->FramesCount = 4;
+    CurrentSprite->FramesCount = 3;
     CurrentSprite->Animate = true;
-    CurrentSprite->AnimationFrameTime = 100.0f;
+    CurrentSprite->AnimationFrameTime = 200.0f;
 }
 
 void GetRandomDirection(float* X, float* Y) {
@@ -291,10 +291,10 @@ void OnJellyDeath(entity_t* CurrentEntity) {
         sprite_t* HitSprite = &Sprites[CurrentEntity->EntityId];
 
         if (HitSprite != 0) {
-            HitSprite->TextureId = 5;
+            HitSprite->TextureId = 3;
             HitSprite->Animate = true;
-            HitSprite->FramesCount = 50;
-            HitSprite->AnimationFrameTime = 100.0f;
+            HitSprite->FramesCount = 49;
+            HitSprite->AnimationFrameTime = 10.0f;
         }
         
         CurrentEntity->CurrentHealth = 0;
@@ -306,11 +306,27 @@ void OnJellyFreeze(entity_t* JellyEntity, float Duration, float CurrentTime) {
 		JellyEntity->Frozen = 1;
 		JellyEntity->DefrostTime = Duration + CurrentTime;
 		JellyEntity->CanBeHurt = 1; // Jelly can be hurt if frozen.
+
+		// Set new animation.
+		sprite_t* JellySprite = &Sprites[JellyEntity->EntityId];
+		if (JellySprite) {
+			JellySprite->CurrentFrame = 0;
+			JellySprite->TextureId = 2;
+			JellySprite->Animate = true;
+		}
 	}
 }
 
 void OnJellyDefrost(entity_t* JellyEntity) {
 	if (JellyEntity) {
 		JellyEntity->CanBeHurt = 0;
+
+		// Set new animation.
+		sprite_t* JellySprite = &Sprites[JellyEntity->EntityId];
+		if (JellySprite) {
+			JellySprite->CurrentFrame = 0;
+			JellySprite->TextureId = 1;
+			JellySprite->Animate = true;
+		}
 	}
 }

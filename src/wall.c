@@ -18,7 +18,7 @@ void RenderWallProjection(void) {
         
         // Draw ceiling.
         for (int y = 0; y < WallTopPixel; ++y) {
-            DrawPixel(x, y, 0xff9b7582);
+            DrawPixel(x, y, CEILING_COLOR);
         }
         
         int32_t TextureOffsetX = 0;
@@ -32,7 +32,7 @@ void RenderWallProjection(void) {
         
         
         // TODO: Add some null checks
-        texture_t* CurrentTexture = GetTexture(Rays[x].TextureId - 1);
+        texture_t* CurrentTexture = GetTexture(Rays[x].TextureId);
         uint32_t* TextureBuffer = CurrentTexture->Buffer;
         const int32_t TextureW = CurrentTexture->Width;
         const int32_t TextureH = CurrentTexture->Height;
@@ -59,7 +59,7 @@ void RenderWallProjection(void) {
         
         // Draw floor.
         for (int y = WallBottomPixel; y < WINDOW_H; ++y) {
-            DrawPixel(x, y, 0xff221c16);
+            DrawPixel(x, y, FLOOR_COLOR);
         }
     }
 }

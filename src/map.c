@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "map.h"
 #include "consts.h"
 #include "upng.h"
@@ -5,27 +6,44 @@
 #include "sprite.h"
 #include "entity.h"
 
-#define NUM_OF_OBJECT_TYPES 5
+static map_object_t Map[MAP_NUM_ROWS][MAP_NUM_COLS];
 
-static uint32_t Map[MAP_NUM_ROWS][MAP_NUM_COLS];
-
-// Check TileColors array and set proper enum tile indices
-// This indices are direct references into TileColors array.
-enum ObjectTypes {
-    EOBJECT_EMPTY = 0,
-    EOBJECT_SAMPLE_WALL = 1,
-    EOBJECT_PLAYER = 2,
-    EOBJECT_GHOST = 3,
-    EOBJECT_DOORS = 4
-};
-
-// TileColors directly map color with object type in map png file.
-static uint32_t TileColors[NUM_OF_OBJECT_TYPES] = {
-    /*0*/0xffffffff, // empty floor
-    /*1*/0xff32283f, // sample wall
-    /*2*/0xff62e7ff, // player
-    /*3*/0xff443be5, // ghost enemy
-    /*4*/0xff000000, // doors
+map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
+	{
+		.Type = EOBJECT_EMPTY,
+		.ColorCode = 0,
+		.TextureId = 0
+	},
+	{
+		.Type = EOBJECT_BASIC_WALL,
+		.ColorCode = 0xff32283f,
+		.TextureId = 7
+	},
+	{
+		.Type = EOBJECT_PLAYER,
+		.ColorCode = 0xff62e7ff,
+		.TextureId = 0
+	},
+	{
+		.Type = EOBJECT_GHOST,
+		.ColorCode = 0xff443be5,
+		.TextureId = 0
+	},
+	{
+		.Type = EOBJECT_DOORS,
+		.ColorCode = 0xff000000,
+		.TextureId = 0
+	},
+	{
+		.Type = EOBJECT_LIGHTS_WALL,
+		.ColorCode = 0,
+		.TextureId = 0
+	},
+	{
+		.Type = EOBJECT_COCKPIT_COMPUTER,
+		.ColorCode = 0xff3b0d76,
+		.TextureId = 8
+	},
 };
 
 
@@ -37,7 +55,7 @@ bool MapHasDoorsAt(float X, float Y) {
     int MapGridIndexX = floor(X / TILE_SIZE);
     int MapGridIndexY = floor(Y / TILE_SIZE); 
 
-    return Map[MapGridIndexY][MapGridIndexX] == EOBJECT_DOORS;
+    return Map[MapGridIndexY][MapGridIndexX].Type == EOBJECT_DOORS;
 }
 
 
@@ -49,10 +67,10 @@ bool MapHasWallAt(float X, float Y) {
     int MapGridIndexX = floor(X / TILE_SIZE);
     int MapGridIndexY = floor(Y / TILE_SIZE); 
 
-    return Map[MapGridIndexY][MapGridIndexX] != 0;
+    return Map[MapGridIndexY][MapGridIndexX].Type != EOBJECT_EMPTY;
 }
 
-int32_t GetMapAt(int32_t I, int32_t J) {
+map_object_t GetMapAt(int32_t I, int32_t J) {
     return Map[I][J];
 }
 
@@ -60,13 +78,13 @@ bool IsInsideMap(float X, float Y) {
     return (X >= 0 && X <= MAP_NUM_COLS * TILE_SIZE && Y >= 0 && Y <= MAP_NUM_ROWS * TILE_SIZE);
 }
 
-int32_t GetTileFromColor(uint32_t Color) {
-    for (int32_t i=0; i < NUM_OF_OBJECT_TYPES; i++) {
-        if (TileColors[i] == Color) {
-            return i;
+map_object_t GetTileFromColor(uint32_t Color) {
+    for (int32_t i=0; i < NUM_MAP_OBJECTS; i++) {
+        if (MapObjectsDefinitions[i].ColorCode == Color) {
+            return MapObjectsDefinitions[i];
         }
     }
-    return 0;
+    return MapObjectsDefinitions[0];
 }
 
 void GetTileCenterPosition(int32_t x, int32_t y, float *OutX, float *OutY) {
@@ -76,7 +94,17 @@ void GetTileCenterPosition(int32_t x, int32_t y, float *OutX, float *OutY) {
     *OutY = ((y + 1) * TILE_SIZE) - (TILE_SIZE / 2);
 }
 
+void ClearMap(void) {
+	for (int32_t i=0; i < MAP_NUM_COLS; i++) {
+		for (int32_t j=0; j < MAP_NUM_ROWS; j++) {
+			Map[i][j] = MapObjectsDefinitions[0];
+		}
+	}
+}
+
 bool LoadMap(const char* MapFilePath) {
+	ClearMap();
+
     upng_t* PngFile = upng_new_from_file(MapFilePath);
     
     if (PngFile == 0) {
@@ -96,21 +124,21 @@ bool LoadMap(const char* MapFilePath) {
         for (int32_t y = 0; y < MAP_NUM_COLS; ++y) {
             for (int32_t x = 0; x < MAP_NUM_ROWS; ++x) {
                 uint32_t MapColor = Buffer[(MAP_NUM_COLS * y) + x];
-                int32_t ObjectType = GetTileFromColor(MapColor);
+                map_object_t ObjectType = GetTileFromColor(MapColor);
                 
                 // PLAYER
                 // ____________________________________________________
-                if (ObjectType == EOBJECT_PLAYER) {
+                if (ObjectType.Type == EOBJECT_PLAYER) {
                     // Set player start position.
                     GetTileCenterPosition(x, y, &Player.X, &Player.Y);
                     
                     // Clear space by setting it as empty.
-                    ObjectType = EOBJECT_EMPTY;
+                    ObjectType.Type = EOBJECT_EMPTY;
                 }
                 
                 // JELLY ENEMY
                 // ____________________________________________________
-                if (ObjectType == EOBJECT_GHOST) {
+                if (ObjectType.Type == EOBJECT_GHOST) {
                     if (CurrentSpriteIndex < NUM_SPRITES) {
                         // Setup entity object.
                         float PositionX;
@@ -120,7 +148,7 @@ bool LoadMap(const char* MapFilePath) {
                         CurrentSpriteIndex++;
                     }
                     
-                    ObjectType = EOBJECT_EMPTY;
+                    ObjectType.Type = EOBJECT_EMPTY;
                 }
                 
                 Map[y][x] = ObjectType;

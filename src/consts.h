@@ -29,4 +29,9 @@
 #define NUM_SPRITES 64
 #define NUM_ENTITIES NUM_SPRITES
 
+#define FLOOR_COLOR 0xff3a2a2a
+#define CEILING_COLOR 0xff241010
+
+#define ENABLE_DEBUG_MINIMAP 0
+
 #endif

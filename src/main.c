@@ -171,7 +171,7 @@ void RenderMapGrid(void) {
 		for (int j = 0; j < MAP_NUM_COLS; j++) {
 			int TileX = j * TILE_SIZE;
 			int TileY = i * TILE_SIZE;
-			uint32_t TileColor = GetMapAt(i, j) != 0 ? 0xffffffff : 0xff000000;
+			uint32_t TileColor = GetMapAt(i, j).Type != 0 ? 0xffffffff : 0xff000000;
 
 			DrawRectangle(
 					TileX * MINIMAP_SCALE_FACTOR,
@@ -202,10 +202,12 @@ void Render(void) {
 	RenderSpriteProjection();
 
 	// Render minimap objects.
-	RenderMapGrid();
-	RenderMapRays();
-	RenderMapSprites();
-	RenderMapPlayer();
+	if (ENABLE_DEBUG_MINIMAP) {
+		RenderMapGrid();
+		RenderMapRays();
+		RenderMapSprites();
+		RenderMapPlayer();
+	}
 
 	// Render 2D layer.
 	Render2DLayer();

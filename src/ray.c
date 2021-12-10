@@ -35,7 +35,7 @@ void CastRay(float RayAngle, int StripId) {
     bool foundHWallHit = false;
     float wallHitX_horizontal = 0;
     float wallHitY_horizontal = 0;
-    int HorizontalWallContent = 0;
+    map_object_t HorizontalWallContent;
 
     // Find the y coordinate of the closest horizontal grid intersection
     yintercept = floor(Player.Y / TILE_SIZE) * TILE_SIZE;
@@ -63,7 +63,7 @@ void CastRay(float RayAngle, int StripId) {
             // There is a wall hit.
             wallHitX_horizontal = nextHX;
             wallHitY_horizontal = nextHY;
-            HorizontalWallContent = GetMapAt((int)floor(YCheck / TILE_SIZE), (int)floor(XCheck / TILE_SIZE));
+            HorizontalWallContent = GetMapAt((int32_t)floor(YCheck / TILE_SIZE), (int32_t)floor(XCheck / TILE_SIZE));
             foundHWallHit = true;
             break;
         } else {
@@ -80,7 +80,7 @@ void CastRay(float RayAngle, int StripId) {
     bool foundVWallHit = false;
     float wallHitX_vertical = 0;
     float wallHitY_vertical = 0;
-    int VerticalWallContent = 0;
+    map_object_t VerticalWallContent;
 
     // Find the x coordinate of the closest vertical grid intersection
     xintercept = floor(Player.X / TILE_SIZE) * TILE_SIZE;
@@ -133,14 +133,14 @@ void CastRay(float RayAngle, int StripId) {
         Rays[StripId].Distance = VerticalHitDistance;
         Rays[StripId].WallHitX = wallHitX_vertical;
         Rays[StripId].WallHitY = wallHitY_vertical;
-        Rays[StripId].TextureId = VerticalWallContent;
+        Rays[StripId].TextureId = VerticalWallContent.TextureId;
         Rays[StripId].WasHitVertical = true;
         Rays[StripId].RayAngle = RayAngle;
     } else {
         Rays[StripId].Distance = HorizontalHitDistance;
         Rays[StripId].WallHitX = wallHitX_horizontal;
         Rays[StripId].WallHitY = wallHitY_horizontal;
-        Rays[StripId].TextureId = HorizontalWallContent;
+        Rays[StripId].TextureId = HorizontalWallContent.TextureId;
         Rays[StripId].WasHitVertical = false;
         Rays[StripId].RayAngle = RayAngle;
     }
