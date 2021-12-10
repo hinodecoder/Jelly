@@ -12,6 +12,8 @@
 #include "sprite.h"
 #include "input.h"
 #include "entity.h"
+#include "state_machine.h"
+#include "game_states.h"
 
 
 SDL_Window* Window = NULL;
@@ -20,6 +22,10 @@ bool IsGameRunning = false;
 int TicksLastFrame = 0;
 SDL_Texture* ColorBufferTexture = NULL;
 int32_t SHOW_CURSOR = 1;
+
+extern void Render(void);
+
+
 
 bool InitializeWindow(void) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -105,6 +111,56 @@ void CreateHUD(void) {
 	Player.WeaponSprites[1] = ShootWeaponSprite->SpriteId;
 }
 
+void UpdateAllEntities(float DeltaTime, float CurrentTime) {
+	for (int32_t i=0; i < NUM_ENTITIES; ++i) {
+		entity_t* CurrentEntity = &Entities[i];
+		UpdateEntity(CurrentEntity, DeltaTime, CurrentTime);
+	}
+}
+
+// GAMEPLAY STATE FUNCTIONS
+// ______________________________________________________________________________________________________________
+void GameplayEnter(void) {
+	// Important: Create HUD AFTER loading a map due to sprite indexing.
+	CreateHUD();
+}
+
+void GameplayExit(void) {
+}
+
+void GameplayExecute(float DeltaTime, float CurrentTime) {
+	PlayerMove(DeltaTime);
+	PlayerShoot(TicksLastFrame);
+	PlayerOpenDoors();
+	UpdateAllEntities(DeltaTime, CurrentTime);
+
+	// Update all animated sprites.
+	UpdateAnimatedSprites(TicksLastFrame);
+
+	// Update all rays.
+	CastAllRays();
+    
+    Render();
+}
+
+// ______________________________________________________________________________________________________________
+// END GAMEPLAY STATE FUNCTIONS
+
+// MAP LOAD STATE FUNCTIONS
+// ______________________________________________________________________________________________________________
+void MapLoadExecute(float DeltaTime, float CurrentTime) {
+	if (MapLoadState.CustomData) {
+		LoadMap(MapLoadState.CustomData);
+		StateMachine_ChangeState(&GameStateMachine, &GameplayState);
+	}
+	else {
+		printf("Cannot read custom data in Load Map State.\n");
+	}
+}
+
+// ______________________________________________________________________________________________________________
+
+
 void Setup(void) {
 	// Allocate color buffer here
 	CreateColorBuffer(WINDOW_W, WINDOW_H);
@@ -116,18 +172,20 @@ void Setup(void) {
 	InitializeSprites();
 	CreateAllEntities();
 
-	LoadMap("./data/maps/Test.png");
+	// Create game states here.
+	GameplayState.OnEnter = &GameplayEnter;
+	GameplayState.OnExit = &GameplayExit;
+	GameplayState.OnExecute = &GameplayExecute;
 
-	// Important: Create HUD AFTER loading a map due to sprite indexing.
-	CreateHUD();
+	// Create another game states.
+	MapLoadState.OnEnter = 0;
+	MapLoadState.OnExecute = &MapLoadExecute;
+	MapLoadState.OnExit = 0;
+
+	MapLoadState.CustomData = "./data/maps/test.png";
+	StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
 }
 
-void UpdateAllEntities(float DeltaTime, float CurrentTime) {
-	for (int32_t i=0; i < NUM_ENTITIES; ++i) {
-		entity_t* CurrentEntity = &Entities[i];
-		UpdateEntity(CurrentEntity, DeltaTime, CurrentTime);
-	}
-}
 
 void HandleInputExit(void) {
 	int32_t NumKeys;
@@ -137,7 +195,7 @@ void HandleInputExit(void) {
 	}
 }
 
-void Update(void) {
+void UpdateStateMachine(void) {
 	int TimeToWait = FRAME_TIME_LENGTH - (SDL_GetTicks() - TicksLastFrame);
 
 	if (TimeToWait > 0 && TimeToWait <= FRAME_TIME_LENGTH) {
@@ -148,16 +206,7 @@ void Update(void) {
 
 	TicksLastFrame = SDL_GetTicks();
 
-	// TODO: Move gameplay code to some kind of state machine.
-	PlayerMove(DeltaTime);
-	PlayerShoot(TicksLastFrame);
-	UpdateAllEntities(DeltaTime, TicksLastFrame);
-
-	// Update all animated sprites.
-	UpdateAnimatedSprites(TicksLastFrame);
-
-	// Update all rays.
-	CastAllRays();
+	StateMachine_Update(&GameStateMachine, DeltaTime, TicksLastFrame);
 }
 
 void RenderColorBuffer(void) {
@@ -241,8 +290,7 @@ int main(int argc, char *argv[]) {
 
 		HandleInputExit();
 		UpdateInput();
-		Update();
-		Render();
+        UpdateStateMachine();
 	}
 
 	ReleaseResources();

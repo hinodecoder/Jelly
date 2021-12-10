@@ -32,6 +32,7 @@ void UpdateInput(void) {
     Keys[EKEY_DOWN] = KeyStates[SDL_SCANCODE_DOWN] || KeyStates[SDL_SCANCODE_S];
     Keys[EKEY_LEFT] = KeyStates[SDL_SCANCODE_LEFT] || KeyStates[SDL_SCANCODE_A];
     Keys[EKEY_RIGHT] = KeyStates[SDL_SCANCODE_RIGHT] || KeyStates[SDL_SCANCODE_D];
+	Keys[EKEY_OPEN_DOORS] = KeyStates[SDL_SCANCODE_SPACE];
     
     // Update mouse state.
     // _________________________________________________________

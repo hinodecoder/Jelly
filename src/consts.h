@@ -32,6 +32,6 @@
 #define FLOOR_COLOR 0xff6a4343
 #define CEILING_COLOR 0xff422b35
 
-#define ENABLE_DEBUG_MINIMAP 0
+#define ENABLE_DEBUG_MINIMAP 1
 
 #endif

@@ -13,7 +13,7 @@ typedef struct {
     int32_t DeltaY;
 } mouse_state_t;
 
-#define NUMBER_OF_KEYS 6
+#define NUMBER_OF_KEYS 7
 extern bool Keys[NUMBER_OF_KEYS];
 extern mouse_state_t MouseState;
 
@@ -23,7 +23,8 @@ enum keys_e {
     EKEY_LEFT = 2,
     EKEY_RIGHT = 3,
     EKEY_SHOOT = 4,
-	EKEY_ALT_SHOOT = 5
+	EKEY_ALT_SHOOT = 5,
+	EKEY_OPEN_DOORS = 6
 };
 
 void InitInput(void);

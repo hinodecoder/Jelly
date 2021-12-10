@@ -31,8 +31,8 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 	},
 	{
 		.Type = EOBJECT_DOORS,
-		.ColorCode = 0xff000000,
-		.TextureId = 0
+		.ColorCode = 0xfffa1579,
+		.TextureId = 9
 	},
 	{
 		.Type = EOBJECT_LIGHTS_WALL,

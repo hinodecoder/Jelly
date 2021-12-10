@@ -8,7 +8,7 @@
 #include "ray.h"
 #include "sprite.h"
 #include "entity.h"
-
+#include "game_states.h"
 
 player_t Player = {
 	.X = 5 * TILE_SIZE,
@@ -18,10 +18,11 @@ player_t Player = {
 	.RotationAngle = -HALF_PI,
 	.WalkSpeed = 60,// 60,
 	.TurnSpeed = 8 * (PI / 180),
+	.InteractionDistance = 25.0f,
 	.ShootFrequency = 500.0f,
 	.NextShootTime = 0.0f,
 	.BasicWeaponDamage = 1,
-	.WeaponAltModeDuration = 2000.0f // 2 sec
+	.WeaponAltModeDuration = 2000.0f // 2 ShootFrequency
 };
 
 void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDirection) {
@@ -86,14 +87,10 @@ void PlayerMove(float DeltaTime) {
 	if (!MapHasWallAt(Player.X, NewPlayerY)) {
 		Player.Y = NewPlayerY;
 	}
-	// if (!MapHasWallAt(NewPlayerX, NewPlayerY)) {
-		// Player.X = NewPlayerX;
-		// Player.Y = NewPlayerY;
-	// }
 }
 
 
-void ClearWeaponAnimationStates() {
+void ClearWeaponAnimationStates(void) {
 	// Clear all states.
 	for (int32_t i=0; i < NUM_WEAPON_STATES; ++i) {
 		sprite_t* StateSprite = &Sprites[Player.WeaponSprites[i]];
@@ -163,6 +160,18 @@ void PlayerShoot(float CurrentTime) {
 				DelayNextShoot(CurrentTime);
 			}
 		}	
+}
+
+void PlayerOpenDoors() {
+	float WalkX = Player.X + (cos(Player.RotationAngle) * Player.InteractionDistance);
+	float WalkY = Player.Y + (sin(Player.RotationAngle) * Player.InteractionDistance);
+
+	if (MapHasDoorsAt(WalkX, WalkY)) {
+		if (Keys[EKEY_OPEN_DOORS]) {
+			MapLoadState.CustomData = "./data/maps/Corridor.png";
+			StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
+		}
+	}
 }
 
 void RenderMapPlayer(void) {
