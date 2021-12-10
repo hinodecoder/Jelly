@@ -95,6 +95,8 @@ void GetTileCenterPosition(int32_t x, int32_t y, float *OutX, float *OutY) {
 }
 
 void ClearMap(void) {
+	InitializeSprites();
+	NextFreeSpriteIndex = 0;
 	for (int32_t i=0; i < MAP_NUM_COLS; i++) {
 		for (int32_t j=0; j < MAP_NUM_ROWS; j++) {
 			Map[i][j] = MapObjectsDefinitions[0];

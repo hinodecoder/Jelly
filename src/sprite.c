@@ -218,14 +218,16 @@ void UpdateAnimatedSprites(float CurrentTime) {
 }
 
 void RenderMapSprites(void) {
-    for (int i=0; i < NUM_SPRITES; ++i) {
-        sprite_t* CurrentSprite = &Sprites[i];
-        DrawRectangle(
-            CurrentSprite->X * MINIMAP_SCALE_FACTOR,
-            CurrentSprite->Y * MINIMAP_SCALE_FACTOR,
-            2,
-            2,
-            CurrentSprite->IsVisible ? 0xffffffff : 0xff0000ff
-            );
-    }
+	for (int i=0; i < NUM_SPRITES; ++i) {
+		sprite_t* CurrentSprite = &Sprites[i];
+		if (CurrentSprite->IsVisible && !CurrentSprite->Use2D) {
+			DrawRectangle(
+					CurrentSprite->X * MINIMAP_SCALE_FACTOR,
+					CurrentSprite->Y * MINIMAP_SCALE_FACTOR,
+					2,
+					2,
+					CurrentSprite->IsVisible ? 0xffffffff : 0xff0000ff
+					);
+		}
+	}
 }
