@@ -79,10 +79,17 @@ void PlayerMove(float DeltaTime) {
 	float NewPlayerX = Player.X + (DirectionX * Player.WalkSpeed * DeltaTime);
 	float NewPlayerY = Player.Y + (DirectionY * Player.WalkSpeed * DeltaTime);
 
-	if (!MapHasWallAt(NewPlayerX, NewPlayerY)) {
+	if (!MapHasWallAt(NewPlayerX, Player.Y)) {
 		Player.X = NewPlayerX;
+	}
+
+	if (!MapHasWallAt(Player.X, NewPlayerY)) {
 		Player.Y = NewPlayerY;
 	}
+	// if (!MapHasWallAt(NewPlayerX, NewPlayerY)) {
+		// Player.X = NewPlayerX;
+		// Player.Y = NewPlayerY;
+	// }
 }
 
 
