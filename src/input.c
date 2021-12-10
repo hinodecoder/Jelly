@@ -32,7 +32,10 @@ void UpdateInput(void) {
     Keys[EKEY_DOWN] = KeyStates[SDL_SCANCODE_DOWN] || KeyStates[SDL_SCANCODE_S];
     Keys[EKEY_LEFT] = KeyStates[SDL_SCANCODE_LEFT] || KeyStates[SDL_SCANCODE_A];
     Keys[EKEY_RIGHT] = KeyStates[SDL_SCANCODE_RIGHT] || KeyStates[SDL_SCANCODE_D];
-	Keys[EKEY_OPEN_DOORS] = KeyStates[SDL_SCANCODE_SPACE];
+    
+    // Special actions keys - react on key up.
+    int32_t OpenDoorPressed = KeyStates[SDL_SCANCODE_SPACE];
+    Keys[EKEY_OPEN_DOORS] = OpenDoorPressed && !KeysPrevious[EKEY_OPEN_DOORS] ? OpenDoorPressed : 0;
     
     // Update mouse state.
     // _________________________________________________________
@@ -66,4 +69,5 @@ void UpdateInput(void) {
     // Update previous keys states.
     KeysPrevious[EKEY_SHOOT] = LeftMouseButtonPressed;
 	KeysPrevious[EKEY_ALT_SHOOT] = RightMouseButtonPressed;
+    KeysPrevious[EKEY_OPEN_DOORS] = OpenDoorPressed;
 }

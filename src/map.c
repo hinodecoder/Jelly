@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "map.h"
 #include "consts.h"
 #include "upng.h"
@@ -46,6 +47,79 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 	},
 };
 
+
+
+
+
+// MAPS INITIALIZATION AND LOGIC DEFINITION
+// __________________________________________________________________________________________
+#define NUM_MAPS 8
+#define MAX_MAP_FILE_NAME 32
+
+// List of all maps in the game.
+char Maps[NUM_MAPS][MAX_MAP_FILE_NAME] = {
+	"./data/maps/cockpit.png",
+	"./data/maps/corridor.png"
+};
+
+// List of logic definitions for all maps.
+map_logic_t MapLogic[NUM_MAPS];
+
+// The map we're currently playing.
+int32_t CurrentMapId;
+
+void ClearDoorInfo(map_logic_t* CurrentLogic) {
+	for (int32_t i=0; i < NUM_DOORS; ++i) {
+		CurrentLogic->Doors[i].Valid = false;
+	}
+}
+
+
+// LIST OF MAP LOGICS
+// __________________________________________________________________________________________
+void CreateLogicForMap_01(map_logic_t* CurrentLogic) {
+	if (CurrentLogic) {
+		// TODO: Create logic here. It's messy as hell...
+		door_info_t* Door = &CurrentLogic->Doors[0];
+		Door->Valid = true;
+		Door->X = 7;
+		Door->Y = 10;
+		Door->LinkMapId = 1;
+		Door->PlayerAngle = -PI / 2;
+	}
+}
+
+void CreateLogicForMap_02(map_logic_t* CurrentLogic) {
+	if (CurrentLogic) {
+		door_info_t* Door = &CurrentLogic->Doors[0];
+		Door->Valid = true;
+		Door->X = 7;
+		Door->Y = 15;
+		Door->LinkMapId = 0;
+		Door->PlayerAngle = -PI / 2;
+	}
+}
+// __________________________________________________________________________________________
+
+// Array with functions pointers to create proper logic for all maps.
+void (*MapLogicCreationFunctions[NUM_MAPS])(map_logic_t*) = {
+	&CreateLogicForMap_01,
+	&CreateLogicForMap_02
+};
+
+// Create proper maps definitions on game start.
+void InitializeMapsList(void) {
+	for (int32_t i=0; i < NUM_MAPS; ++i) {
+		map_logic_t* Logic = &MapLogic[i];
+		Logic->Id = i;
+		memcpy(&Logic->FilePath, &Maps[i], sizeof(char) * MAX_MAP_FILE_NAME);
+		if (MapLogicCreationFunctions[i]) {
+			MapLogicCreationFunctions[i](Logic); // Create actual logic for that map "i"
+		}
+	}
+}
+// END OF: MAPS INITIALIZATION AND LOGIC DEFINITION
+// __________________________________________________________________________________________
 
 bool MapHasDoorsAt(float X, float Y) {
     if (X < 0 || X >= MAP_NUM_COLS * TILE_SIZE || Y < 0 || Y >= MAP_NUM_ROWS * TILE_SIZE) {
@@ -104,10 +178,12 @@ void ClearMap(void) {
 	}
 }
 
-bool LoadMap(const char* MapFilePath) {
+bool LoadMap(int32_t MapId) {
 	ClearMap();
+	CurrentMapId = MapId;
+	map_logic_t* CurrentMapLogic = &MapLogic[MapId];
 
-    upng_t* PngFile = upng_new_from_file(MapFilePath);
+    upng_t* PngFile = upng_new_from_file(CurrentMapLogic->FilePath);
     
     if (PngFile == 0) {
         return false;
@@ -158,9 +234,34 @@ bool LoadMap(const char* MapFilePath) {
             
             NextFreeSpriteIndex = CurrentSpriteIndex + 1;
         }
-    }
-    
+	}
+	else {
+		printf("Cannot load map!\n");
+	}
+
     upng_free(PngFile);
     
     return true;
+}
+
+
+// GAME MAP LOGIC
+
+door_info_t* GetDoorInfo(float X, float Y) {
+	if (X < 0 || X >= MAP_NUM_COLS * TILE_SIZE || Y < 0 || Y >= MAP_NUM_ROWS * TILE_SIZE) {
+        return 0;
+    }
+
+	int MapGridIndexX = floor(X / TILE_SIZE);
+	int MapGridIndexY = floor(Y / TILE_SIZE);
+
+	for (int32_t i = 0; i < NUM_DOORS; ++i) {
+		door_info_t* Door = MapLogic[CurrentMapId].Doors;
+		if (Door && Door->Valid) {
+			if (Door->X == MapGridIndexX && Door->Y == MapGridIndexY) {
+				return Door;
+            }
+		}
+	}
+	return 0;
 }

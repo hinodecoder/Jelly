@@ -149,13 +149,8 @@ void GameplayExecute(float DeltaTime, float CurrentTime) {
 // MAP LOAD STATE FUNCTIONS
 // ______________________________________________________________________________________________________________
 void MapLoadExecute(float DeltaTime, float CurrentTime) {
-	if (MapLoadState.CustomData) {
-		LoadMap(MapLoadState.CustomData);
-		StateMachine_ChangeState(&GameStateMachine, &GameplayState);
-	}
-	else {
-		printf("Cannot read custom data in Load Map State.\n");
-	}
+	LoadMap(MapLoadState.CustomData);
+	StateMachine_ChangeState(&GameStateMachine, &GameplayState);
 }
 
 // ______________________________________________________________________________________________________________
@@ -168,6 +163,7 @@ void Setup(void) {
 	// Create color buffer texture for SDL.
 	ColorBufferTexture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, WINDOW_W, WINDOW_H);
 
+	InitializeMapsList();
 	LoadTextures();
 	InitializeSprites();
 	CreateAllEntities();
@@ -182,7 +178,7 @@ void Setup(void) {
 	MapLoadState.OnExecute = &MapLoadExecute;
 	MapLoadState.OnExit = 0;
 
-	MapLoadState.CustomData = "./data/maps/test.png";
+	MapLoadState.CustomData = 0;
 	StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
 }
 

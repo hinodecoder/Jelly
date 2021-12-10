@@ -15,8 +15,8 @@ player_t Player = {
 	.Y = 2 * TILE_SIZE,
 	.Width = 10,
 	.Height = 10,
-	.RotationAngle = -HALF_PI,
-	.WalkSpeed = 60,// 60,
+	.RotationAngle = HALF_PI,
+	.WalkSpeed = 80,// 60,
 	.TurnSpeed = 8 * (PI / 180),
 	.InteractionDistance = 25.0f,
 	.ShootFrequency = 500.0f,
@@ -168,8 +168,12 @@ void PlayerOpenDoors() {
 
 	if (MapHasDoorsAt(WalkX, WalkY)) {
 		if (Keys[EKEY_OPEN_DOORS]) {
-			MapLoadState.CustomData = "./data/maps/Corridor.png";
-			StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
+			door_info_t* DoorInfo = GetDoorInfo(WalkX, WalkY);
+            if (DoorInfo) {
+                MapLoadState.CustomData = DoorInfo->LinkMapId;
+                StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
+				Player.RotationAngle = DoorInfo->PlayerAngle;
+            }
 		}
 	}
 }
