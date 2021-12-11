@@ -6,6 +6,7 @@
 #include "math.h"
 #include "player.h"
 #include "map.h"
+#include "audio.h"
 
 entity_t Entities[NUM_ENTITIES];
 
@@ -297,6 +298,19 @@ void OnJellyWander(entity_t* JellyEntity, float DeltaTime) {
 	}
 }
 
+void PlayJellyDeathSound(void) {
+	static const char Sounds[6][32] = {
+		"./data/sounds/jelly_death01.wav",
+		"./data/sounds/jelly_death02.wav",
+		"./data/sounds/jelly_death03.wav",
+		"./data/sounds/jelly_death05.wav",
+		"./data/sounds/jelly_death06.wav",
+	};
+	
+	int32_t RandomIndex = rand() % 4;
+	playSound(Sounds[RandomIndex], SDL_MIX_MAXVOLUME);
+}
+
 void OnJellyDeath(entity_t* CurrentEntity) {
     if (CurrentEntity != 0) {
         sprite_t* HitSprite = &Sprites[CurrentEntity->EntityId];
@@ -307,6 +321,7 @@ void OnJellyDeath(entity_t* CurrentEntity) {
         }
         
         CurrentEntity->CurrentHealth = 0;
+		PlayJellyDeathSound();
     }
 }
 
