@@ -89,15 +89,18 @@ void CalculateWeaponScreenPosition(int32_t TextureId, float* X, float* Y, int32_
 // TODO: Move somewhere
 void CreateHUD(void) {
 	// Create static weapon sprite.
-	sprite_t* StaticWeaponSprite = CreateSprite(ETEXTURE_SHOTGUN_STATIC, 0, 0);
+	sprite_t* StaticWeaponSprite = CreateSprite(ETEXTURE_GUN_DEFAULT, 0, 0);
 	StaticWeaponSprite->Use2D = true;
 	StaticWeaponSprite->Empty = false;
 	StaticWeaponSprite->IsVisible = true;
+	StaticWeaponSprite->Animate = true;
+	StaticWeaponSprite->AnimationFrameTime = 100.0f;
+	StaticWeaponSprite->FramesCount = 5;
 
 	// Weapon positioning.
-	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_STATIC, &StaticWeaponSprite->X, &StaticWeaponSprite->Y, 1);
+	CalculateWeaponScreenPosition(ETEXTURE_GUN_DEFAULT, &StaticWeaponSprite->X, &StaticWeaponSprite->Y, 5);
 
-	//Create shooting weapon sprite.
+	// Create freeze shot weapon sprite.
 	const static int32_t WEAPON_SHOOT_FRAMES_COUNT = 7;
 	sprite_t* ShootWeaponSprite = CreateSprite(ETEXTURE_SHOTGUN_SHOOT, 0, 0);
 	ShootWeaponSprite->Use2D = true;
@@ -109,8 +112,21 @@ void CreateHUD(void) {
 
 	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_SHOOT, &ShootWeaponSprite->X, &ShootWeaponSprite->Y, WEAPON_SHOOT_FRAMES_COUNT);
 
+	// Create fire shoot sprite.
+	
+	sprite_t* FireShootSprite = CreateSprite(ETEXTURE_GUN_FIRE_SHOT, 0, 0);
+	FireShootSprite->Use2D = true;
+	FireShootSprite->Empty = false;
+	FireShootSprite->IsVisible = false;
+	FireShootSprite->Animate = true;
+	FireShootSprite->AnimationFrameTime = 50.0f;
+	FireShootSprite->FramesCount = WEAPON_SHOOT_FRAMES_COUNT;
+
+	CalculateWeaponScreenPosition(ETEXTURE_GUN_FIRE_SHOT, &FireShootSprite->X, &FireShootSprite->Y, WEAPON_SHOOT_FRAMES_COUNT);
+
 	Player.WeaponSprites[0] = StaticWeaponSprite->SpriteId;
 	Player.WeaponSprites[1] = ShootWeaponSprite->SpriteId;
+	Player.WeaponSprites[2] = FireShootSprite->SpriteId;
 
 	// Create health HUD.
 	const static int32_t HEALTH_OFFSET = 20;

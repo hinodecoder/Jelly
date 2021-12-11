@@ -3,7 +3,7 @@
 
 #include "sprite.h"
 
-#define NUM_WEAPON_STATES 2
+#define NUM_WEAPON_STATES 3
 #define MAX_HEALTH 3
 
 typedef struct {

@@ -55,12 +55,12 @@ bool IsEntityDead(entity_t* CurrentEntity) {
 
 void ApplyDamage(entity_t* CurrentEntity, int32_t Damage) {
 	if (CurrentEntity != 0) {
-		if (CurrentEntity->CanBeHurt) {
+		//if (CurrentEntity->CanBeHurt) {
 			CurrentEntity->CurrentHealth = CurrentEntity->CurrentHealth - Damage;
 			if (CurrentEntity->CurrentHealth <= 0 && CurrentEntity->OnDeath != 0) {
 				CurrentEntity->OnDeath(CurrentEntity);
 			}
-		}
+		//}
 		// TODO: Add callback when entity is invincible and we need to show player some feedback.
 	}
 }
