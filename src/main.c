@@ -40,7 +40,7 @@ bool InitializeWindow(void) {
 	//int32_t DisplayHeight = DisplayMode.h;
 
 	int32_t DisplayWidth = 1280;
-	int32_t DisplayHeight = 800;
+	int32_t DisplayHeight = 720;
 
 	Window = SDL_CreateWindow( NULL,
 			SDL_WINDOWPOS_CENTERED,
@@ -97,15 +97,16 @@ void CreateHUD(void) {
 	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_STATIC, &StaticWeaponSprite->X, &StaticWeaponSprite->Y, 1);
 
 	//Create shooting weapon sprite.
+	const static int32_t WEAPON_SHOOT_FRAMES_COUNT = 7;
 	sprite_t* ShootWeaponSprite = CreateSprite(ETEXTURE_SHOTGUN_SHOOT, 0, 0);
 	ShootWeaponSprite->Use2D = true;
 	ShootWeaponSprite->Empty = false;
 	ShootWeaponSprite->IsVisible = false;
 	ShootWeaponSprite->Animate = true;
 	ShootWeaponSprite->AnimationFrameTime = 50.0f;
-	ShootWeaponSprite->FramesCount = 5;
+	ShootWeaponSprite->FramesCount = WEAPON_SHOOT_FRAMES_COUNT;
 
-	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_STATIC, &ShootWeaponSprite->X, &ShootWeaponSprite->Y, 5);
+	CalculateWeaponScreenPosition(ETEXTURE_SHOTGUN_SHOOT, &ShootWeaponSprite->X, &ShootWeaponSprite->Y, WEAPON_SHOOT_FRAMES_COUNT);
 
 	Player.WeaponSprites[0] = StaticWeaponSprite->SpriteId;
 	Player.WeaponSprites[1] = ShootWeaponSprite->SpriteId;

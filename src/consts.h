@@ -12,7 +12,7 @@
 #define MINIMAP_SCALE_FACTOR 0.15
 
 #define WINDOW_W 640 
-#define WINDOW_H 400 
+#define WINDOW_H 360 
 
 #define FOV_ANGLE (60 * (PI / 180))
 #define FOV_HALF_ANGLE FOV_ANGLE/2
