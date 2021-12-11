@@ -132,7 +132,7 @@ void CreateHUD(void) {
 	const static int32_t HEALTH_OFFSET = 20;
 	int32_t PosX = HEALTH_OFFSET;
 	for (int32_t i=0; i < Player.Health; ++i) {
-		sprite_t* Health1 = CreateSprite(ETEXTURE_HEART, PosX, 50);
+		sprite_t* Health1 = CreateSprite(ETEXTURE_HEART, PosX, 20);
 		Health1->Use2D = true;
 		Health1->Empty = false;
 		Health1->IsVisible = true;

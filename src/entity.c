@@ -302,10 +302,8 @@ void OnJellyDeath(entity_t* CurrentEntity) {
         sprite_t* HitSprite = &Sprites[CurrentEntity->EntityId];
 
         if (HitSprite != 0) {
-            HitSprite->TextureId = 3;
-            HitSprite->Animate = true;
-            HitSprite->FramesCount = 49;
-            HitSprite->AnimationFrameTime = 10.0f;
+			HitSprite->IsVisible = false;
+			HitSprite->Empty = true;
         }
         
         CurrentEntity->CurrentHealth = 0;
