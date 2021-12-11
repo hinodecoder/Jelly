@@ -9,6 +9,7 @@
 #include "sprite.h"
 #include "entity.h"
 #include "game_states.h"
+#include "audio.h"
 
 player_t Player = {
 	.X = 5 * TILE_SIZE,
@@ -153,11 +154,28 @@ void DelayNextShoot(float CurrentTime) {
 	Player.NextShootTime = CurrentTime + Player.ShootFrequency;
 }
 
+void PlayAltShootSound(void) {
+	playSound("./data/sounds/shoot.wav", SDL_MIX_MAXVOLUME);
+}
+
+void PlayFireShootSound(void) {
+	static const char Sounds[4][32] = {
+		"./data/sounds/shoot01.wav",
+		"./data/sounds/shoot02.wav",
+		"./data/sounds/shoot03.wav",
+		"./data/sounds/shoot04.wav",
+	};
+
+	int32_t RandomIndex = rand() % 3;
+	playSound(Sounds[RandomIndex], SDL_MIX_MAXVOLUME);
+}
+
 void PlayerShoot(float CurrentTime) {
 	// Primary shoot mode.
 	if (Keys[EKEY_SHOOT]) {
 		if (CanShoot(CurrentTime)) {
 			PlayWeaponFireShootAnimation();
+			PlayFireShootSound();
 			int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
 			if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
 				entity_t* HitEntity = &Entities[BlockedId];
@@ -178,6 +196,7 @@ void PlayerShoot(float CurrentTime) {
 		if (Keys[EKEY_ALT_SHOOT]) {
 			if (CanShoot(CurrentTime)) {
 				PlayWeaponFreezeShootAnimation();
+				PlayAltShootSound();
 				int32_t BlockedId = Rays[CENTER_RAY].BlockedBy;
 				if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
 					entity_t* HitEntity = &Entities[BlockedId];
