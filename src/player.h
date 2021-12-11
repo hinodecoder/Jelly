@@ -4,6 +4,7 @@
 #include "sprite.h"
 
 #define NUM_WEAPON_STATES 2
+#define MAX_HEALTH 3
 
 typedef struct {
     float X;
@@ -14,6 +15,13 @@ typedef struct {
     float WalkSpeed;
     float TurnSpeed;
 	float InteractionDistance;
+
+	// Health
+	int32_t MaxHealth;
+	int32_t Health;
+
+	// HUD
+	int32_t HealthUI[3];
 
 	// Shooting mechanic.
 	int32_t WeaponSprites[NUM_WEAPON_STATES];
@@ -27,11 +35,13 @@ typedef struct {
 extern player_t Player;
 
 
+void InitPlayer(void);
 void PlayerMove(float DeltaTime);
 void PlayerShoot(float CurrentTime);
 void PlayerOpenDoors(void);
 void RenderMapPlayer(void);
 void OnShootAnimationEnd(sprite_t* CurrentSprite);
+void OnPlayerDamage(void);
 
 
 #endif // PLAYER_H

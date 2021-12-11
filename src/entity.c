@@ -16,6 +16,7 @@ entity_t Entities[NUM_ENTITIES];
 #define AI_SEEK_DISTANCE 10.0f
 #define JELLY_SPEED 10.0f
 #define JELLY_BOOST_SPEED 50.0f
+#define JELLY_SUICIDE_DISTANCE 15.0f
 // _____________________________________________________________
 
 
@@ -252,6 +253,16 @@ void OnJellyChasePlayer(entity_t* JellyEntity, float DeltaTime) {
     // Do move.
     CalculateDirectionToPlayer(JellyEntity);
     OnJellyWander(JellyEntity, DeltaTime);
+
+	// Check distance to player.
+	sprite_t* JellySprite = &Sprites[JellyEntity->EntityId];
+	float DistanceToPlayer = DistanceBetweenPoints(Player.X, Player.Y, JellySprite->X, JellySprite->Y);
+	printf("Distance: %f\n", DistanceToPlayer);
+	if (DistanceToPlayer <= JELLY_SUICIDE_DISTANCE) {
+		JellyEntity->CanBeHurt = true;
+		ApplyDamage(JellyEntity, 9999); // Just kill myself.
+		OnPlayerDamage();
+	}
     
     // Return to normal speed.
     JellyEntity->Speed = JELLY_SPEED;

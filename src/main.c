@@ -14,6 +14,7 @@
 #include "entity.h"
 #include "state_machine.h"
 #include "game_states.h"
+#include "audio.h"
 
 
 SDL_Window* Window = NULL;
@@ -110,6 +111,29 @@ void CreateHUD(void) {
 
 	Player.WeaponSprites[0] = StaticWeaponSprite->SpriteId;
 	Player.WeaponSprites[1] = ShootWeaponSprite->SpriteId;
+
+	// Create health HUD.
+	sprite_t* Health1 = CreateSprite(ETEXTURE_HEART, 20, 50);
+	Health1->Use2D = true;
+	Health1->Empty = false;
+	Health1->IsVisible = true;
+	Health1->TextureId = 12;
+
+	sprite_t* Health2 = CreateSprite(ETEXTURE_HEART, 40, 50);
+	Health2->Use2D = true;
+	Health2->Empty = false;
+	Health2->IsVisible = true;
+	Health2->TextureId = 12;
+
+	sprite_t* Health3 = CreateSprite(ETEXTURE_HEART, 60, 50);
+	Health3->Use2D = true;
+	Health3->Empty = false;
+	Health3->IsVisible = true;
+	Health3->TextureId = 12;
+
+	Player.HealthUI[0] = Health1->SpriteId;
+	Player.HealthUI[1] = Health2->SpriteId;
+	Player.HealthUI[2] = Health3->SpriteId;
 }
 
 void UpdateAllEntities(float DeltaTime, float CurrentTime) {
@@ -157,7 +181,7 @@ void MapLoadExecute(float DeltaTime, float CurrentTime) {
 // ______________________________________________________________________________________________________________
 
 
-void Setup(void) {
+void MAIN_Setup(void) {
 	// Allocate color buffer here
 	CreateColorBuffer(WINDOW_W, WINDOW_H);
 
@@ -168,6 +192,9 @@ void Setup(void) {
 	LoadTextures();
 	InitializeSprites();
 	CreateAllEntities();
+
+	// Player health after death.
+	Player.Health = Player.MaxHealth;
 
 	// Create game states here.
 	GameplayState.OnEnter = &GameplayEnter;
@@ -181,6 +208,11 @@ void Setup(void) {
 
 	MapLoadState.CustomData = 0;
 	StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
+
+	// audio test
+	// SDL_Init(SDL_INIT_AUDIO);
+	// initAudio();
+	// playMusic("./data/music/road.wav", SDL_MIX_MAXVOLUME);
 }
 
 
@@ -280,7 +312,7 @@ int main(int argc, char *argv[]) {
 	IsGameRunning = InitializeWindow();
 
 	InitInput();
-	Setup();
+	MAIN_Setup();
 
 	while (IsGameRunning) {
 		SDL_PumpEvents();

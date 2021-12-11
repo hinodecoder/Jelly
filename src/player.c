@@ -22,7 +22,9 @@ player_t Player = {
 	.ShootFrequency = 500.0f,
 	.NextShootTime = 0.0f,
 	.BasicWeaponDamage = 1,
-	.WeaponAltModeDuration = 2000.0f // 2 ShootFrequency
+	.WeaponAltModeDuration = 2000.0f, // 2 ShootFrequency
+	.MaxHealth = 3,
+	.Health = 3
 };
 
 void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDirection) {
@@ -43,6 +45,19 @@ void GetCurrentMoveData(int32_t *WalkDirection, int32_t *Turn, int32_t *StrafeDi
 
 	// Check turn.
 	*Turn = MouseState.DeltaX;
+}
+
+void OnPlayerDamage(void) {
+	Player.Health--;
+	int32_t SpriteId = Player.HealthUI[Player.Health];
+	sprite_t* HealthSprite = &Sprites[SpriteId];
+	HealthSprite->IsVisible = false;
+	// TODO: Play some audio queue and FX
+	
+	// Check Player death.
+	if (Player.Health <= 0) {
+		MAIN_Setup();
+	}
 }
 
 void PlayerMove(float DeltaTime) {

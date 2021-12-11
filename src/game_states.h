@@ -7,4 +7,7 @@ extern state_machine_t GameStateMachine;
 extern state_t GameplayState;
 extern state_t MapLoadState;
 
+// Extern main setup function.
+extern void MAIN_Setup(void);
+
 #endif
