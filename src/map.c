@@ -45,6 +45,11 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 		.ColorCode = 0xff3b0d76,
 		.TextureId = 8
 	},
+	{
+		.Type = EOBJECT_DOOR_CLOSED,
+		.ColorCode = 0xff003ba2 ,
+		.TextureId = 10
+	},
 };
 
 

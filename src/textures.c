@@ -2,7 +2,7 @@
 #include "textures.h"
 
 
-#define NUM_TEXTURES 10 
+#define NUM_TEXTURES 11 
 
 static const char* TexturesPaths[NUM_TEXTURES] = {
     /*0*/"./data/textures/no_texture.png",
@@ -11,10 +11,11 @@ static const char* TexturesPaths[NUM_TEXTURES] = {
     /*3*/"./data/sprites/jelly_explosion.png",
     /*4*/"./data/sprites/shotgun_gg.png",
     /*5*/"./data/sprites/planet.png",
-	/*6*/"./data/sprites/shotgun_static.png",
-	/*7*/"./data/textures/HEXAGONS.png",
+	/*6*/"./data/sprites/gun_static.png",
+	/*7*/"./data/textures/corridor_wall.png",
 	/*8*/"./data/textures/BIGSQUARES.png",
-	/*9*/"./data/textures/SUPPORT.png",
+	/*9*/"./data/textures/door_open.png",
+	/*10*/"./data/textures/door_closed.png",
 };
 
 // Hold all textures neccessary in game.
