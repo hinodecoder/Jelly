@@ -147,7 +147,7 @@ void CreateJellyEnemy(entity_t* CurrentEntity, float X, float Y) {
     
     // Jelly animation.
     CurrentSprite->CurrentFrame = 0;
-    CurrentSprite->FramesCount = 3;
+    CurrentSprite->FramesCount = 5;
     CurrentSprite->Animate = true;
     CurrentSprite->AnimationFrameTime = 200.0f;
 }
@@ -321,7 +321,7 @@ void OnJellyFreeze(entity_t* JellyEntity, float Duration, float CurrentTime) {
 		if (JellySprite) {
 			JellySprite->CurrentFrame = 0;
 			JellySprite->TextureId = 2;
-			JellySprite->Animate = true;
+			JellySprite->Animate = false;
 		}
 	}
 }
