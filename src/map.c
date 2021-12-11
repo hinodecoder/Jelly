@@ -59,7 +59,8 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 // List of all maps in the game.
 char Maps[NUM_MAPS][MAX_MAP_FILE_NAME] = {
 	"./data/maps/cockpit.png",
-	"./data/maps/corridor.png"
+	"./data/maps/corridor.png",
+	"./data/maps/arena.png"
 };
 
 // List of logic definitions for all maps.
@@ -91,12 +92,34 @@ void CreateLogicForMap_01(map_logic_t* CurrentLogic) {
 
 void CreateLogicForMap_02(map_logic_t* CurrentLogic) {
 	if (CurrentLogic) {
+		{
+			door_info_t* Door = &CurrentLogic->Doors[0];
+			Door->Valid = true;
+			Door->X = 7;
+			Door->Y = 15;
+			Door->LinkMapId = 0;
+			Door->PlayerAngle = -PI / 2;
+		}
+
+		{
+			door_info_t* Door = &CurrentLogic->Doors[1];
+			Door->Valid = true;
+			Door->X = 4;
+			Door->Y = 6;
+			Door->LinkMapId = 2;
+			Door->PlayerAngle = PI;
+		}
+	}
+}
+
+void CreateLogicForMap_03(map_logic_t* CurrentLogic) {
+	if (CurrentLogic) {
 		door_info_t* Door = &CurrentLogic->Doors[0];
 		Door->Valid = true;
-		Door->X = 7;
-		Door->Y = 15;
-		Door->LinkMapId = 0;
-		Door->PlayerAngle = -PI / 2;
+		Door->X = 13;
+		Door->Y = 11;
+		Door->LinkMapId = 1;
+		Door->PlayerAngle = -PI;
 	}
 }
 // __________________________________________________________________________________________
@@ -104,7 +127,8 @@ void CreateLogicForMap_02(map_logic_t* CurrentLogic) {
 // Array with functions pointers to create proper logic for all maps.
 void (*MapLogicCreationFunctions[NUM_MAPS])(map_logic_t*) = {
 	&CreateLogicForMap_01,
-	&CreateLogicForMap_02
+	&CreateLogicForMap_02,
+	&CreateLogicForMap_03
 };
 
 // Create proper maps definitions on game start.
@@ -212,7 +236,7 @@ bool LoadMap(int32_t MapId) {
                     
                     // Clear space by setting it as empty.
                     ObjectType.Type = EOBJECT_EMPTY;
-                }
+               }
                 
                 // JELLY ENEMY
                 // ____________________________________________________
@@ -256,7 +280,7 @@ door_info_t* GetDoorInfo(float X, float Y) {
 	int MapGridIndexY = floor(Y / TILE_SIZE);
 
 	for (int32_t i = 0; i < NUM_DOORS; ++i) {
-		door_info_t* Door = MapLogic[CurrentMapId].Doors;
+		door_info_t* Door = &MapLogic[CurrentMapId].Doors[i];
 		if (Door && Door->Valid) {
 			if (Door->X == MapGridIndexX && Door->Y == MapGridIndexY) {
 				return Door;
