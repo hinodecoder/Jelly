@@ -216,11 +216,6 @@ void MAIN_Setup(void) {
 
 	MapLoadState.CustomData = 0;
 	StateMachine_ChangeState(&GameStateMachine, &MapLoadState);
-
-	// audio test
-	// SDL_Init(SDL_INIT_AUDIO);
-	// initAudio();
-	// playMusic("./data/music/road.wav", SDL_MIX_MAXVOLUME);
 }
 
 
@@ -310,6 +305,12 @@ void ReleaseResources(void) {
 	FreeTextures();
 }
 
+void InitMusic(void) {
+	SDL_Init(SDL_INIT_AUDIO);
+	initAudio();
+	playMusic("./data/music/music.wav", SDL_MIX_MAXVOLUME / 2);
+}
+
 int main(int argc, char *argv[]) {
 	// HACK: hacky way to silent warnings about unused parameters
 	if (argc) {
@@ -321,6 +322,8 @@ int main(int argc, char *argv[]) {
 
 	InitInput();
 	MAIN_Setup();
+
+	InitMusic();
 
 	while (IsGameRunning) {
 		SDL_PumpEvents();

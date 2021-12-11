@@ -22,7 +22,7 @@ void RenderWallProjection(void) {
         }
         
         int32_t TextureOffsetX = 0;
-        
+
         // Base on vertical or horizontal hit we take remainder of proper axis.
         if (Rays[x].WasHitVertical) {
             TextureOffsetX = (int32_t) Rays[x].WallHitY % TILE_SIZE;
