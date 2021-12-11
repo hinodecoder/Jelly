@@ -113,27 +113,17 @@ void CreateHUD(void) {
 	Player.WeaponSprites[1] = ShootWeaponSprite->SpriteId;
 
 	// Create health HUD.
-	sprite_t* Health1 = CreateSprite(ETEXTURE_HEART, 20, 50);
-	Health1->Use2D = true;
-	Health1->Empty = false;
-	Health1->IsVisible = true;
-	Health1->TextureId = 12;
-
-	sprite_t* Health2 = CreateSprite(ETEXTURE_HEART, 40, 50);
-	Health2->Use2D = true;
-	Health2->Empty = false;
-	Health2->IsVisible = true;
-	Health2->TextureId = 12;
-
-	sprite_t* Health3 = CreateSprite(ETEXTURE_HEART, 60, 50);
-	Health3->Use2D = true;
-	Health3->Empty = false;
-	Health3->IsVisible = true;
-	Health3->TextureId = 12;
-
-	Player.HealthUI[0] = Health1->SpriteId;
-	Player.HealthUI[1] = Health2->SpriteId;
-	Player.HealthUI[2] = Health3->SpriteId;
+	const static int32_t HEALTH_OFFSET = 20;
+	int32_t PosX = HEALTH_OFFSET;
+	for (int32_t i=0; i < Player.Health; ++i) {
+		sprite_t* Health1 = CreateSprite(ETEXTURE_HEART, PosX, 50);
+		Health1->Use2D = true;
+		Health1->Empty = false;
+		Health1->IsVisible = true;
+		Health1->TextureId = 12;
+		PosX += HEALTH_OFFSET;
+		Player.HealthUI[i] = Health1->SpriteId;
+	}
 }
 
 void UpdateAllEntities(float DeltaTime, float CurrentTime) {
@@ -194,7 +184,9 @@ void MAIN_Setup(void) {
 	CreateAllEntities();
 
 	// Player health after death.
-	Player.Health = Player.MaxHealth;
+	if (Player.Health <= 0) {
+		Player.Health = Player.MaxHealth;
+	}
 
 	// Create game states here.
 	GameplayState.OnEnter = &GameplayEnter;
