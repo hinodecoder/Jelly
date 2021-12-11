@@ -19,6 +19,7 @@ enum ObjectTypes {
 	EOBJECT_LIGHTS_WALL,
 	EOBJECT_COCKPIT_COMPUTER,
 	EOBJECT_DOOR_CLOSED,
+	EOBJECT_WALL_WINDOW,
 };
 
 
@@ -29,7 +30,7 @@ typedef struct map_object_t {
 } map_object_t;
 
 
-#define NUM_MAP_OBJECTS 8
+#define NUM_MAP_OBJECTS 9
 extern map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS];
 
 

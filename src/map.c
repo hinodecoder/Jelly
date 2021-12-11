@@ -47,8 +47,13 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 	},
 	{
 		.Type = EOBJECT_DOOR_CLOSED,
-		.ColorCode = 0xff003ba2 ,
+		.ColorCode = 0xff003ba2,
 		.TextureId = 10
+	},
+	{
+		.Type = EOBJECT_WALL_WINDOW,
+		.ColorCode = 0xff6b5389,
+		.TextureId = 11
 	},
 };
 
