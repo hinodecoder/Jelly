@@ -257,7 +257,6 @@ void OnJellyChasePlayer(entity_t* JellyEntity, float DeltaTime) {
 	// Check distance to player.
 	sprite_t* JellySprite = &Sprites[JellyEntity->EntityId];
 	float DistanceToPlayer = DistanceBetweenPoints(Player.X, Player.Y, JellySprite->X, JellySprite->Y);
-	printf("Distance: %f\n", DistanceToPlayer);
 	if (DistanceToPlayer <= JELLY_SUICIDE_DISTANCE) {
 		JellyEntity->CanBeHurt = true;
 		ApplyDamage(JellyEntity, 9999); // Just kill myself.
@@ -279,22 +278,23 @@ void OnJellyWander(entity_t* JellyEntity, float DeltaTime) {
         
         const float FinalDestinationX = JellySprite->X + DeltaX;
         const float FinalDestinationY = JellySprite->Y + DeltaY;
-        
-        if (MapHasWallAt(FinalDestinationX, FinalDestinationY)) {
-            return;
-        }
-        
-        // Check if destination reached.
-        float DistanceToDestination = DistanceBetweenPoints(JellySprite->X, JellySprite->Y, JellyEntity->DestinationX, JellyEntity->DestinationY);
-        if (DistanceToDestination <= AI_SEEK_DISTANCE) {
-            JellyEntity->DestinationX = 0.0f;
-            JellyEntity->DestinationY = 0.0f;
-            return;
-        }
-        
-        JellySprite->X = FinalDestinationX;
-        JellySprite->Y = FinalDestinationY;
-    }
+
+		// Check if destination reached.
+		float DistanceToDestination = DistanceBetweenPoints(JellySprite->X, JellySprite->Y, JellyEntity->DestinationX, JellyEntity->DestinationY);
+		if (DistanceToDestination <= AI_SEEK_DISTANCE) {
+			JellyEntity->DestinationX = 0.0f;
+			JellyEntity->DestinationY = 0.0f;
+			return;
+		}
+
+		if (!MapHasWallAt(FinalDestinationX, JellySprite->Y)) {
+			JellySprite->X = FinalDestinationX;
+		}
+
+		if (!MapHasWallAt(JellySprite->X, FinalDestinationY)) {
+			JellySprite->Y = FinalDestinationY;
+		}
+	}
 }
 
 void OnJellyDeath(entity_t* CurrentEntity) {
