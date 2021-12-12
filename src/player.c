@@ -170,6 +170,10 @@ void PlayFireShootSound(void) {
 	playSound(Sounds[RandomIndex], SDL_MIX_MAXVOLUME);
 }
 
+void PlayImpactSound(void) {
+	playSound("./data/sounds/jelly_impact.wav", SDL_MIX_MAXVOLUME);
+}
+
 void PlayerShoot(float CurrentTime) {
 	// Primary shoot mode.
 	if (Keys[EKEY_SHOOT]) {
@@ -180,6 +184,7 @@ void PlayerShoot(float CurrentTime) {
 			if (BlockedId >= 0 && BlockedId < NUM_ENTITIES) {
 				entity_t* HitEntity = &Entities[BlockedId];
 				if (HitEntity != 0) {
+					PlayImpactSound();
 					if (HitEntity->Frozen) {
 						ApplyDamage(HitEntity, Player.BasicWeaponDamage * 10);
 					}

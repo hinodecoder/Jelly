@@ -202,6 +202,7 @@ void MAIN_Setup(void) {
 	// Player health after death.
 	if (Player.Health <= 0) {
 		Player.Health = Player.MaxHealth;
+		playSound("./data/sounds/player_reset.wav", SDL_MIX_MAXVOLUME);
 	}
 
 	// Create game states here.
@@ -309,6 +310,7 @@ void InitMusic(void) {
 	SDL_Init(SDL_INIT_AUDIO);
 	initAudio();
 	playMusic("./data/music/music.wav", SDL_MIX_MAXVOLUME / 2);
+	playSound("./data/sounds/game_start.wav", SDL_MIX_MAXVOLUME);
 }
 
 int main(int argc, char *argv[]) {
