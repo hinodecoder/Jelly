@@ -75,7 +75,9 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 char Maps[NUM_MAPS][MAX_MAP_FILE_NAME] = {
 	"./data/maps/cockpit.png",
 	"./data/maps/corridor.png",
-	"./data/maps/arena.png"
+	"./data/maps/arena.png",
+	"./data/maps/friendly_room.png",
+	"./data/maps/maze.png",
 };
 
 // List of logic definitions for all maps.
@@ -94,6 +96,7 @@ void ClearDoorInfo(map_logic_t* CurrentLogic) {
 // LIST OF MAP LOGICS
 // __________________________________________________________________________________________
 void CreateLogicForMap_01(map_logic_t* CurrentLogic) {
+	// cockpit
 	if (CurrentLogic) {
 		// TODO: Create logic here. It's messy as hell...
 		door_info_t* Door = &CurrentLogic->Doors[0];
@@ -106,13 +109,14 @@ void CreateLogicForMap_01(map_logic_t* CurrentLogic) {
 }
 
 void CreateLogicForMap_02(map_logic_t* CurrentLogic) {
+	// corridor
 	if (CurrentLogic) {
 		{
 			door_info_t* Door = &CurrentLogic->Doors[0];
 			Door->Valid = true;
-			Door->X = 7;
-			Door->Y = 15;
-			Door->LinkMapId = 0;
+			Door->X = 11;
+			Door->Y = 10;
+			Door->LinkMapId = 3;
 			Door->PlayerAngle = -PI / 2;
 		}
 
@@ -128,12 +132,25 @@ void CreateLogicForMap_02(map_logic_t* CurrentLogic) {
 }
 
 void CreateLogicForMap_03(map_logic_t* CurrentLogic) {
+	// arena
 	if (CurrentLogic) {
 		door_info_t* Door = &CurrentLogic->Doors[0];
 		Door->Valid = true;
-		Door->X = 13;
-		Door->Y = 11;
-		Door->LinkMapId = 1;
+		Door->X = 11;
+		Door->Y = 2;
+		Door->LinkMapId = 4;
+		Door->PlayerAngle = -PI / 2;
+	}
+}
+
+void CreateLogicForMap_04(map_logic_t* CurrentLogic) {
+	// friendly room
+	if (CurrentLogic) {
+		door_info_t* Door = &CurrentLogic->Doors[0];
+		Door->Valid = true;
+		Door->X = 8;
+		Door->Y = 5;
+		Door->LinkMapId = 4;
 		Door->PlayerAngle = -PI;
 	}
 }
@@ -143,7 +160,8 @@ void CreateLogicForMap_03(map_logic_t* CurrentLogic) {
 void (*MapLogicCreationFunctions[NUM_MAPS])(map_logic_t*) = {
 	&CreateLogicForMap_01,
 	&CreateLogicForMap_02,
-	&CreateLogicForMap_03
+	&CreateLogicForMap_03,
+	&CreateLogicForMap_04
 };
 
 // Create proper maps definitions on game start.
