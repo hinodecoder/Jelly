@@ -354,3 +354,43 @@ void OnJellyDefrost(entity_t* JellyEntity) {
 		}
 	}
 }
+
+
+// FRIENDLY AI
+// _________________________________________________________________________________
+void CreateFriendlyAI(entity_t* CurrentEntity, float X, float Y) {
+	// Health stuff.
+    CurrentEntity->MaxHealth = 999999;
+    CurrentEntity->CurrentHealth = 999999;
+	CurrentEntity->CanBeHurt = 0;
+
+	// Some events and "polymorphic" functions.
+    CurrentEntity->OnDeath = &OnJellyDeath;
+    CurrentEntity->OnUpdate = &OnAIUpdate;
+    CurrentEntity->OnThink = &OnFriendlyThink;
+
+    CurrentEntity->Speed = JELLY_SPEED;
+    
+	// Set random think frequency to look less dumb.
+    int32_t RandomNumber = (rand() % 20 + 18);
+    CurrentEntity->ThinkFrequency = (float) (RandomNumber * 100.0f);
+
+	// Setup basic sprite.
+    sprite_t* CurrentSprite = &Sprites[CurrentEntity->EntityId];
+    CurrentSprite->X = X;
+    CurrentSprite->Y = Y;
+    CurrentSprite->TextureId = 14;
+    CurrentSprite->Empty = false;
+    CurrentSprite->Scale = 1.0f;
+
+	// Jelly animation.
+	// CurrentSprite->CurrentFrame = 0;
+	// CurrentSprite->FramesCount = 5;
+	// CurrentSprite->Animate = true;
+	// CurrentSprite->AnimationFrameTime = 200.0f;
+}
+
+void OnFriendlyThink(entity_t* JellyEntity) {
+	CalculateJellyWanderDestination(JellyEntity);
+	JellyEntity->OnAIAction = &OnJellyWander;
+}

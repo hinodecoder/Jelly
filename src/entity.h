@@ -55,4 +55,8 @@ void OnJellyFreeze(entity_t* JellyEntity, float Duration, float CurrentTime);
 void OnJellyDefrost(entity_t* JellyEntity);
 void OnJellyDeath(entity_t* CurrentEntity);
 
+// FRIENDLY AI
+void CreateFriendlyAI(entity_t* CurrentEntity, float X, float Y);
+void OnFriendlyThink(entity_t* JellyEntity);
+
 #endif

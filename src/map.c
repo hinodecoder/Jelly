@@ -55,6 +55,11 @@ map_object_t MapObjectsDefinitions[NUM_MAP_OBJECTS] = {
 		.ColorCode = 0xff6b5389,
 		.TextureId = 11
 	},
+	{
+		.Type = EOBJECT_FRIENDLY,
+		.ColorCode = 0xffff00ff,
+		.TextureId = 14
+	},
 };
 
 
@@ -257,6 +262,21 @@ bool LoadMap(int32_t MapId) {
                         float PositionY;
                         GetTileCenterPosition(x, y, &PositionX, &PositionY);
                         CreateJellyEnemy(&Entities[CurrentSpriteIndex], PositionX, PositionY);
+                        CurrentSpriteIndex++;
+                    }
+                    
+                    ObjectType.Type = EOBJECT_EMPTY;
+                }
+
+				// FRIENDLY
+				// ________________________________________________________
+                if (ObjectType.Type == EOBJECT_FRIENDLY) {
+                    if (CurrentSpriteIndex < NUM_SPRITES) {
+                        // Setup entity object.
+                        float PositionX;
+                        float PositionY;
+                        GetTileCenterPosition(x, y, &PositionX, &PositionY);
+                        CreateFriendlyAI(&Entities[CurrentSpriteIndex], PositionX, PositionY);
                         CurrentSpriteIndex++;
                     }
                     
